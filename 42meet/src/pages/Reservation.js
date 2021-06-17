@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Timeline from "../Components/Timeline";
 
 const Reservation = () => {
   const now = new Date();
@@ -27,7 +28,8 @@ const Reservation = () => {
         min={minDate}
         max={maxDate}
       ></input>
-      <div></div>
+      <Timeline />
+      <Timeline />
     </div>
   );
 };
