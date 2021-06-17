@@ -1,12 +1,16 @@
 import React from "react";
 
-const Timeline = () => {
-  let timeArray = [];
+const Timeline = ({ setRoom }) => {
   let meetingRooms = ["1층", "3층", "5층"];
+  let timeArray = [];
   for (let i = 0; i < 24; i++) {
     timeArray.push(i);
   }
-  console.log(timeArray);
+
+  const onClick = (e) => {
+    setRoom(e.target.innerText);
+  };
+
   return (
     <div>
       <table border="1">
@@ -22,7 +26,7 @@ const Timeline = () => {
           {meetingRooms.map((meetingRoom, idx) => {
             return (
               <tr key={idx}>
-                <td>{meetingRoom}</td>
+                <td onClick={onClick}>{meetingRoom}</td>
                 {timeArray.map((n) => {
                   return <td key={n}>O</td>;
                 })}

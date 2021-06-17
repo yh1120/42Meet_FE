@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Timeline from "../Components/Timeline";
+import ReservationForm from "../Components/ReservationForm";
 
 const Reservation = () => {
   const now = new Date();
+  const [selectedRoom, setSelectedRoom] = useState("");
+
   let [selectedDate, setSelectedDate] = useState(
     now.toISOString().substring(0, 10)
   );
@@ -28,8 +31,9 @@ const Reservation = () => {
         min={minDate}
         max={maxDate}
       ></input>
-      <Timeline />
-      <Timeline />
+      <Timeline setRoom={setSelectedRoom} />
+      <Timeline setRoom={setSelectedRoom} />
+      <ReservationForm selectedRoom={selectedRoom} />
     </div>
   );
 };
