@@ -1,7 +1,14 @@
-import React from "react";
+import React from 'react';
 
 const Login = () => {
-  return <div>Login</div>;
+  const handleLogin = () => {
+    console.log('click');
+  };
+  return (
+    <div>
+      <button onClick={handleLogin}>Log In</button>
+    </div>
+  );
 };
 
 export default Login;
