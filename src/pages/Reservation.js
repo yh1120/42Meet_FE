@@ -2,21 +2,26 @@ import React, { useState, useEffect } from 'react';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
-import { jsonToArray, range } from '../utils/utils';
+import { range } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
 
 const Reservation = () => {
   const now = new Date();
+  const rooms = ['1', '2', '3', '4', '5'];
+
+  const [userInput, setUserInput] = useState({
+    selectedDate: now.toISOString().substring(0, 10),
+    selectedRoom: '',
+    startTime: null,
+    endTime: null,
+    department: '',
+    title: '',
+    purpose: '',
+  });
   const [reservationDatas, setReservationDatas] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(
-    now.toISOString().substring(0, 10)
-  );
-  const [selectedRoom, setSelectedRoom] = useState('');
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [reservationTime, setReservationTime] = useState({});
-  const meetingRooms = ['1', '2', '3', '4', '5'];
+  const [reservedTime, setReservedTime] = useState({});
+  const [memberArray, setMemberArray] = useState([]);
 
   const minDate = new Date(now.setDate(now.getDate() + 7))
     .toISOString()
@@ -24,27 +29,22 @@ const Reservation = () => {
   const maxDate = new Date(now.setDate(now.getDate() + 14))
     .toISOString()
     .substring(0, 10);
-  const [memberArray, setMemberArray] = useState([]);
-  const [form, setForm] = useState({
-    department: '',
-    title: '',
-    purpose: '',
-  });
 
-  const test = (jsonArray) => {
-    let temp = {};
-    for (let i = 0; i < meetingRooms.length; i++) {
-      temp[meetingRooms[i]] = [];
+  const getReservedTime = (jsonArray) => {
+    let obj = {};
+    for (let i = 0; i < rooms.length; i++) {
+      obj[rooms[i]] = [];
     }
     for (let i = 0; i < jsonArray.length; i++) {
       const { room_type, start_time, end_time } = jsonArray[i];
-      temp[room_type] = temp[room_type].concat(
+      obj[room_type] = obj[room_type].concat(
         range(parseInt(start_time), parseInt(end_time))
       );
     }
-    setReservationTime(temp);
+    setReservedTime(obj);
   };
-  const getReservations = async () => {
+
+  const getReservedInfo = async () => {
     try {
       const response = [
         {
@@ -64,21 +64,23 @@ const Reservation = () => {
         },
       ];
       // const response = await axios.get('/reservation');
-      const jsonArray = jsonToArray(response);
-      setReservationDatas(jsonArray);
-      test(jsonArray);
+      // const jsonArray = jsonToArray(response);
+      // setReservationDatas(jsonArray);
+      // getReservedTime(jsonArray);
+      getReservedTime(response);
+      setReservationDatas(response);
     } catch (err) {
       console.log(err);
     }
   };
 
   const onChange = (e) => {
-    setSelectedDate(e.target.value);
-    getReservations();
+    setUserInput({ ...userInput, selectedDate: e.target.value });
+    getReservedInfo();
   };
 
   useEffect(() => {
-    // getReservations();
+    if (reservationDatas.length === 0) getReservedInfo();
   });
 
   const openModal = () => {
@@ -89,6 +91,7 @@ const Reservation = () => {
     setModalOpen(false);
   };
 
+  const { selectedDate } = userInput;
   return (
     <div>
       <Navigation />
@@ -102,34 +105,24 @@ const Reservation = () => {
         max={maxDate}
       ></input>
       <Timeline
-        setRoom={setSelectedRoom}
-        reservationDatas={reservationDatas}
-        meetingRooms={meetingRooms}
+        userInput={userInput}
+        setUserInput={setUserInput}
+        meetingRooms={rooms}
+        reservedTime={reservedTime}
       />
-      {/* <Timeline setRoom={setSelectedRoom} /> */}
       <ReservationForm
-        selectedRoom={selectedRoom}
-        startTime={startTime}
-        setStartTime={setStartTime}
-        reservationDatas={reservationDatas}
+        userInput={userInput}
+        setUserInput={setUserInput}
         memberArray={memberArray}
         setMemberArray={setMemberArray}
-        form={form}
-        setForm={setForm}
-        reservationTime={reservationTime}
+        reservedTime={reservedTime}
       />
       <button onClick={openModal}>모달팝업</button>
       <Modal
         open={modalOpen}
         close={closeModal}
         header="Modal heading"
-        selectedDate={selectedDate}
-        selectedRoom={selectedRoom}
-        startTime={startTime}
-        endTime={endTime}
-        department={form.department}
-        title={form.title}
-        purpose={form.purpose}
+        userInput={userInput}
         members={memberArray}
       ></Modal>
     </div>

@@ -3,19 +3,7 @@ import './Modal.css';
 
 const Modal = (props) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-  const {
-    open,
-    close,
-    header,
-    selectedDate,
-    selectedRoom,
-    startTime,
-    endTime,
-    department,
-    title,
-    purpose,
-    members,
-  } = props;
+  const { open, close, header, userInput, members } = props;
   const [validate, setValidate] = useState(true);
   const submit = () => {
     //axios
@@ -25,6 +13,16 @@ const Modal = (props) => {
       close();
     }
   };
+  const {
+    selectedDate,
+    selectedRoom,
+    startTime,
+    endTime,
+    department,
+    title,
+    purpose,
+  } = userInput;
+
   const infos = [
     '예약 날짜',
     '예약 장소',
@@ -44,7 +42,7 @@ const Modal = (props) => {
     [infos[6]]: members ? (
       <ul>
         {members.map((member, idx) => {
-          return <li>{member}</li>;
+          return <li key={idx}>{member}</li>;
         })}
       </ul>
     ) : (
@@ -60,16 +58,15 @@ const Modal = (props) => {
           <header>
             {header}
             <button className="close" onClick={close}>
-              {' '}
-              &times;{' '}
+              &times;
             </button>
           </header>
           <main>
             <div>
               {infos.map((text, idx) => {
                 return (
-                  <div>
-                    <div key={text}>{text}</div>
+                  <div key={idx}>
+                    <div>{text}</div>
                     <div>{values[text]}</div>
                   </div>
                 );
@@ -78,12 +75,10 @@ const Modal = (props) => {
           </main>
           <footer>
             <button className="submit" onClick={submit}>
-              {' '}
-              submit{' '}
+              submit
             </button>
             <button className="close" onClick={close}>
-              {' '}
-              close{' '}
+              close
             </button>
           </footer>
         </section>

@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TimePicker from './Timepicker';
 
 const ReservationForm = ({
-  selectedRoom,
-  startTime,
-  setStartTime,
-  reservationDatas,
+  userInput,
+  setUserInput,
   memberArray,
   setMemberArray,
-  form,
-  setForm,
-  reservationTime,
+  reservedTime,
 }) => {
   const [memberInput, setMemberInput] = useState('');
 
@@ -26,11 +22,10 @@ const ReservationForm = ({
   };
 
   const handleInputChange = (e) => {
-    const nextForm = {
-      ...form,
+    setUserInput({
+      ...userInput,
       [e.target.name]: e.target.value,
-    };
-    setForm(nextForm);
+    });
   };
 
   const handleClick = (e) => {
@@ -38,44 +33,39 @@ const ReservationForm = ({
     setMemberArray(memberArray.slice(0, i).concat(memberArray.slice(i + 1)));
   };
 
-  // useEffect(() => {
-  // });
-
   return (
     <div>
-      <div>선택된 회의실 : [{selectedRoom}]</div>
+      <div>선택된 회의실 : [{userInput.selectedRoom}]</div>
       <TimePicker
         name="startTime"
-        startTime={startTime}
-        setStartTime={setStartTime}
-        selectedRoom={selectedRoom}
-        reservationTime={reservationTime}
+        userInput={userInput}
+        setUserInput={setUserInput}
+        reservedTime={reservedTime}
       ></TimePicker>
       <TimePicker
         name="endTime"
-        startTime={startTime}
-        setStartTime={setStartTime}
-        selectedRoom={selectedRoom}
-        reservationTime={reservationTime}
+        userInput={userInput}
+        setUserInput={setUserInput}
+        reservedTime={reservedTime}
       ></TimePicker>
       <input
         type="text"
         name="department"
-        value={form.department}
+        value={userInput.department}
         placeholder="소속"
         onChange={handleInputChange}
       ></input>
       <input
         type="text"
         name="title"
-        value={form.title}
+        value={userInput.title}
         placeholder="행사명"
         onChange={handleInputChange}
       ></input>
       <input
         type="text"
         name="purpose"
-        value={form.purpose}
+        value={userInput.purpose}
         placeholder="사용목적"
         onChange={handleInputChange}
       ></input>
@@ -86,7 +76,7 @@ const ReservationForm = ({
         value={memberInput}
         placeholder="팀원을 입력해주세요"
       ></input>
-      <div>{memberArray.length}</div>
+      <div>입력된 팀원의 수 : {memberArray.length}</div>
       {memberArray.map((member, idx) => {
         return (
           <div id={idx} key={idx}>
