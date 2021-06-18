@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TimePicker from './Timepicker';
 
-const ReservationForm = ({ selectedRoom }) => {
+const ReservationForm = ({ selectedRoom, selectedTime, reservationDatas }) => {
   const [startTime, setStartTime] = useState(0);
   const [memberArray, setMemberArray] = useState([]);
   const [memberInput, setMemberInput] = useState('');
@@ -10,14 +10,6 @@ const ReservationForm = ({ selectedRoom }) => {
     title: '',
     purpose: ''
   });
-
-  //   console.log(selectedRoom);
-  //   const [endTime, setEndTime] = useState(0);
-
-  //   const onClick = (e) => {
-  //     setStartTime(e.target.value);
-  //     console.log(e.target.value);
-  //   };
 
   const handleKeyPress = e => {
     if (e.key === 'Enter' && memberInput !== '') {
@@ -30,7 +22,7 @@ const ReservationForm = ({ selectedRoom }) => {
     setMemberInput(e.target.value);
   };
 
-  const onCha = e => {
+  const handleInputChange = e => {
     const nextForm = {
       ...form,
       [e.target.name]: e.target.value
@@ -45,29 +37,39 @@ const ReservationForm = ({ selectedRoom }) => {
 
   return (
     <div>
-      <TimePicker startTime={0} setTime={setStartTime} name='startTime'></TimePicker>
-      <TimePicker startTime={startTime} setTime={null} name='endTime'></TimePicker>
+      <TimePicker
+        name='startTime'
+        startTime={selectedTime}
+        setTime={setStartTime}
+        reservationDatas={reservationDatas}
+      ></TimePicker>
+      <TimePicker
+        name='endTime'
+        startTime={selectedTime + 1}
+        setTime={null}
+        reservationDatas={reservationDatas}
+      ></TimePicker>
       <div>{selectedRoom}</div>
       <input
         type='text'
         name='department'
         value={form.department}
         placeholder='소속'
-        onChange={onCha}
+        onChange={handleInputChange}
       ></input>
       <input
         type='text'
         name='title'
         value={form.title}
         placeholder='행사명'
-        onChange={onCha}
+        onChange={handleInputChange}
       ></input>
       <input
         type='text'
         name='purpose'
         value={form.purpose}
         placeholder='사용목적'
-        onChange={onCha}
+        onChange={handleInputChange}
       ></input>
       <input
         type='text'

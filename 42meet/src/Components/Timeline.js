@@ -1,34 +1,47 @@
-import React from "react";
+import React from 'react';
 
-const Timeline = ({ setRoom }) => {
-  let meetingRooms = ["1층", "3층", "5층"];
+const Timeline = ({ setRoom, reservationDatas, setTime }) => {
   let timeArray = [];
   for (let i = 0; i < 24; i++) {
     timeArray.push(i);
   }
 
-  const onClick = (e) => {
+  const handleClick = e => {
     setRoom(e.target.innerText);
+  };
+
+  const selectTime = e => {
+    setTime(parseInt(e.target.id));
   };
 
   return (
     <div>
-      <table border="1">
+      <table border='1'>
         <thead>
           <tr>
             <th>개포</th>
-            {timeArray.map((n) => {
+            {timeArray.map(n => {
               return <th key={n}>{n < 10 ? `0${n}` : n}</th>;
             })}
           </tr>
         </thead>
         <tbody>
-          {meetingRooms.map((meetingRoom, idx) => {
+          {reservationDatas.map((reservationData, idx) => {
+            const { room_type, start_time, end_time } = reservationData;
             return (
               <tr key={idx}>
-                <td onClick={onClick}>{meetingRoom}</td>
-                {timeArray.map((n) => {
-                  return <td key={n}>O</td>;
+                <td onClick={handleClick}>{room_type}</td>
+                {timeArray.map((time, idx) => {
+                  return start_time <= time && time < end_time ? (
+                    <td key={idx} style={{ backgroundColor: 'grey' }}></td>
+                  ) : (
+                    <td
+                      key={idx}
+                      id={idx}
+                      style={{ backgroundColor: 'green' }}
+                      onClick={selectTime}
+                    ></td>
+                  );
                 })}
               </tr>
             );

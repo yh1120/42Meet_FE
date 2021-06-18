@@ -1,29 +1,57 @@
-import React, { useState } from "react";
-import Timeline from "../Components/Timeline";
-import ReservationForm from "../Components/ReservationForm";
-import Navigation from "../Components/Navigation";
+import React, { useState, useEffect } from 'react';
+import Timeline from '../Components/Timeline';
+import ReservationForm from '../Components/ReservationForm';
+import Navigation from '../Components/Navigation';
+// import axios from 'axios';
+import { jsonToArray } from '../utils/utils';
 import Modal from "../Components/Modal/Modal";
 import ModalInput from "../Components/Modal/ModalInput";
 
 const Reservation = () => {
   const now = new Date();
-  const [selectedDate, setSelectedDate] = useState(
-    now.toISOString().substring(0, 10)
-  );
-  const [selectedRoom, setSelectedRoom] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+  const [reservationDatas, setReservationDatas] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(now.toISOString().substring(0, 10));
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState('');
 
-  const minDate = new Date(now.setDate(now.getDate() + 7))
-    .toISOString()
-    .substring(0, 10);
-  const maxDate = new Date(now.setDate(now.getDate() + 14))
-    .toISOString()
-    .substring(0, 10);
+  const minDate = new Date(now.setDate(now.getDate() + 7)).toISOString().substring(0, 10);
+  const maxDate = new Date(now.setDate(now.getDate() + 14)).toISOString().substring(0, 10);
 
-  const onChange = (e) => {
-    setSelectedDate(e.target.value);
-    //axios
+  const getReservations = async () => {
+    try {
+      const response = {
+        0: {
+          room_type: '1층',
+          start_time: '3',
+          end_time: '5'
+        },
+        1: {
+          room_type: '3층',
+          start_time: '2',
+          end_time: '10'
+        }
+      };
+      // const response = {
+      //   '1층': {
+      //     start_time: '3',
+      //     end_time: '5'
+      //   }
+      // };
+      // const response = await axios.get('/reservation');
+      setReservationDatas(jsonToArray(response));
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const onChange = e => {
+    setSelectedDate(e.target.value);
+    getReservations();
+  };
+
+  // useEffect(() => {
+  //   getReservations();
+  // });
 
   const openModal = () => {
     setModalOpen(true);
@@ -37,21 +65,29 @@ const Reservation = () => {
     <div>
       <Navigation />
       <input
-        type="date"
-        id="start"
-        name="Reservation"
+        type='date'
+        id='start'
+        name='Reservation'
         onChange={onChange}
         value={selectedDate}
         min={minDate}
         max={maxDate}
       ></input>
-      <Timeline setRoom={setSelectedRoom} />
-      <Timeline setRoom={setSelectedRoom} />
-      <ReservationForm selectedRoom={selectedRoom} />
+      <Timeline
+        setRoom={setSelectedRoom}
+        reservationDatas={reservationDatas}
+        setTime={setSelectedTime}
+      />
+      {/* <Timeline setRoom={setSelectedRoom} /> */}
+      <ReservationForm
+        selectedRoom={selectedRoom}
+        selectedTime={selectedTime}
+        reservationDatas={reservationDatas}
+      />
       <button onClick={openModal}>모달팝업</button>
       <Modal open={modalOpen} close={closeModal} header="Modal heading">
         <ModalInput selectedDate={selectedDate} selectedRoom={selectedRoom} />
-      </Modal>
+      </Modal>          
     </div>
   );
 };

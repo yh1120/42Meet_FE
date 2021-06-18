@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TimePicker = ({ startTime, setTime, name }) => {
+const TimePicker = ({ name, startTime, setTime, reservationDatas }) => {
   let timeArray = [];
 
   for (let i = 0; i < 24; i++) {
@@ -17,10 +17,17 @@ const TimePicker = ({ startTime, setTime, name }) => {
   return (
     <div>
       <select onChange={handleChange}>
-        {timeArray.map(n => {
+        {timeArray.map((time, idx) => {
+          const { start_time, end_time } = reservationDatas;
+          console.log(reservationDatas);
+          console.log(start_time, end_time);
           return (
-            <option disabled={name === 'endTime' ? (n <= startTime ? true : false) : false}>
-              {n < 12 ? `${n}AM` : `${n}PM`}
+            <option
+              key={idx}
+              selected={time === startTime ? true : false}
+              disabled={name === 'endTime' ? (time <= startTime ? true : false) : false}
+            >
+              {time < 12 ? `${time}AM` : `${time}PM`}
             </option>
           );
         })}
