@@ -1,46 +1,51 @@
 import React from 'react';
+import { range } from '../utils/utils';
 
-const Timeline = ({ setRoom, reservationDatas, setTime }) => {
+const Timeline = ({ setRoom, reservationDatas, meetingRooms }) => {
   let timeArray = [];
+  let reservationTime = [];
+
   for (let i = 0; i < 24; i++) {
     timeArray.push(i);
   }
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setRoom(e.target.innerText);
-  };
-
-  const selectTime = e => {
-    setTime(parseInt(e.target.id));
   };
 
   return (
     <div>
-      <table border='1'>
+      <table border="1">
         <thead>
           <tr>
             <th>개포</th>
-            {timeArray.map(n => {
+            {timeArray.map((n) => {
               return <th key={n}>{n < 10 ? `0${n}` : n}</th>;
             })}
           </tr>
         </thead>
         <tbody>
-          {reservationDatas.map((reservationData, idx) => {
-            const { room_type, start_time, end_time } = reservationData;
+          {meetingRooms.map((meetingRoom, idx) => {
+            {
+              let temp = reservationDatas.filter(
+                (ele) => ele.room_type === meetingRoom
+              );
+              reservationTime = [];
+              for (let i = 0; i < temp.length; i++) {
+                let { start_time, end_time } = temp[i];
+                reservationTime = reservationTime.concat(
+                  range(parseInt(start_time), parseInt(end_time))
+                );
+              }
+            }
             return (
               <tr key={idx}>
-                <td onClick={handleClick}>{room_type}</td>
+                <td onClick={handleClick}>{meetingRoom}</td>
                 {timeArray.map((time, idx) => {
-                  return start_time <= time && time < end_time ? (
+                  return reservationTime.indexOf(time) !== -1 ? (
                     <td key={idx} style={{ backgroundColor: 'grey' }}></td>
                   ) : (
-                    <td
-                      key={idx}
-                      id={idx}
-                      style={{ backgroundColor: 'green' }}
-                      onClick={selectTime}
-                    ></td>
+                    <td key={idx} style={{ backgroundColor: 'green' }}></td>
                   );
                 })}
               </tr>

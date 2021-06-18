@@ -1,5 +1,17 @@
-export const jsonToArray = json => {
+export const jsonToArray = (json) => {
   const arr = [];
+
   for (let i in json) arr.push(json[i]);
+  return arr;
+};
+
+export const range = (start, end) => {
+  let arr = [];
+  let length = end - start;
+
+  for (let i = 0; i < length; i++) {
+    arr[i] = start;
+    start++;
+  }
   return arr;
 };
