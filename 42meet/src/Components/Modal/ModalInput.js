@@ -19,7 +19,6 @@ const ModalInput = ({
     "사용목적",
     "팀원",
   ];
-
   const values = {
     [infos[0]]: selectedDate,
     [infos[1]]: selectedRoom,
@@ -27,12 +26,14 @@ const ModalInput = ({
     [infos[3]]: department,
     [infos[4]]: title,
     [infos[5]]: purpose,
-    [infos[6]]: (
+    [infos[6]]: members ? (
       <ul>
         {members.map((member, idx) => {
           return <li>{member}</li>;
         })}
       </ul>
+    ) : (
+      "없음"
     ),
   };
 

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Timeline from "../Components/Timeline";
 import ReservationForm from "../Components/ReservationForm";
 import Navigation from "../Components/Navigation";
-import Modal from "../Components/Modal";
-import ModalInput from "../Components/ModalInput";
+import Modal from "../Components/Modal/Modal";
+import ModalInput from "../Components/Modal/ModalInput";
 
 const Reservation = () => {
   const now = new Date();
