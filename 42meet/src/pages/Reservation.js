@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import Timeline from "../Components/Timeline";
 import ReservationForm from "../Components/ReservationForm";
 import Navigation from "../Components/Navigation";
+import Modal from "../Components/Modal";
+import ModalInput from "../Components/ModalInput";
 
 const Reservation = () => {
   const now = new Date();
   const [selectedRoom, setSelectedRoom] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
-  let [selectedDate, setSelectedDate] = useState(
+  const [selectedDate, setSelectedDate] = useState(
     now.toISOString().substring(0, 10)
   );
   const minDate = new Date(now.setDate(now.getDate() + 7))
@@ -21,6 +24,15 @@ const Reservation = () => {
     setSelectedDate(e.target.value);
     //axios
   };
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div>
       <Navigation />
@@ -36,6 +48,10 @@ const Reservation = () => {
       <Timeline setRoom={setSelectedRoom} />
       <Timeline setRoom={setSelectedRoom} />
       <ReservationForm selectedRoom={selectedRoom} />
+      <button onClick={openModal}>모달팝업</button>
+      <Modal open={modalOpen} close={closeModal} header="Modal heading">
+        <ModalInput />
+      </Modal>
     </div>
   );
 };
