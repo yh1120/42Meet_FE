@@ -3,22 +3,16 @@ import TimePicker from './Timepicker';
 
 const ReservationForm = ({
   selectedRoom,
-  selectedTime,
-  setEndTime,
+  startTime,
+  setStartTime,
   reservationDatas,
   memberArray,
   setMemberArray,
   form,
   setForm,
+  reservationTime,
 }) => {
-  const [startTime, setStartTime] = useState(0);
   const [memberInput, setMemberInput] = useState('');
-  //   const [memberArray, setMemberArray] = useState([]);
-  //   const [form, setForm] = useState({
-  //     department: '',
-  //     title: '',
-  //     purpose: '',
-  //   });
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && memberInput !== '') {
@@ -44,21 +38,26 @@ const ReservationForm = ({
     setMemberArray(memberArray.slice(0, i).concat(memberArray.slice(i + 1)));
   };
 
+  // useEffect(() => {
+  // });
+
   return (
     <div>
+      <div>선택된 회의실 : [{selectedRoom}]</div>
       <TimePicker
         name="startTime"
-        startTime={selectedTime}
-        setTime={setStartTime}
-        reservationDatas={reservationDatas}
+        startTime={startTime}
+        setStartTime={setStartTime}
+        selectedRoom={selectedRoom}
+        reservationTime={reservationTime}
       ></TimePicker>
       <TimePicker
         name="endTime"
-        startTime={selectedTime + 1}
-        setTime={setEndTime}
-        reservationDatas={reservationDatas}
+        startTime={startTime}
+        setStartTime={setStartTime}
+        selectedRoom={selectedRoom}
+        reservationTime={reservationTime}
       ></TimePicker>
-      <div>{selectedRoom}</div>
       <input
         type="text"
         name="department"
