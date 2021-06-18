@@ -15,3 +15,10 @@ export const range = (start, end) => {
   }
   return arr;
 };
+
+export const getHoursArray = () => {
+  let timeArray = [];
+
+  for (let i = 0; i < 24; i++) timeArray.push(i);
+  return timeArray;
+};
