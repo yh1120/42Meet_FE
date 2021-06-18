@@ -7,12 +7,12 @@ import ModalInput from "../Components/ModalInput";
 
 const Reservation = () => {
   const now = new Date();
-  const [selectedRoom, setSelectedRoom] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-
   const [selectedDate, setSelectedDate] = useState(
     now.toISOString().substring(0, 10)
   );
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+
   const minDate = new Date(now.setDate(now.getDate() + 7))
     .toISOString()
     .substring(0, 10);
@@ -50,7 +50,7 @@ const Reservation = () => {
       <ReservationForm selectedRoom={selectedRoom} />
       <button onClick={openModal}>모달팝업</button>
       <Modal open={modalOpen} close={closeModal} header="Modal heading">
-        <ModalInput />
+        <ModalInput selectedDate={selectedDate} selectedRoom={selectedRoom} />
       </Modal>
     </div>
   );
