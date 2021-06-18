@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Timeline from "../Components/Timeline";
 import ReservationForm from "../Components/ReservationForm";
+import Navigation from "../Components/Navigation";
 
 const Reservation = () => {
   const now = new Date();
@@ -22,6 +23,7 @@ const Reservation = () => {
   };
   return (
     <div>
+      <Navigation />
       <input
         type="date"
         id="start"

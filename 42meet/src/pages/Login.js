@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
 
 const Login = () => {
   const handleLogin = () => {
-    console.log('click');
+    console.log("click");
+    window.location.href = "/reservation";
   };
   return (
     <div>
