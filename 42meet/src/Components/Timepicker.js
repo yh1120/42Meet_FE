@@ -1,28 +1,35 @@
-import React from "react";
+import React from 'react';
 
-const TimePicker = ({ startTime, setTime, name }) => {
+const TimePicker = ({ name, startTime, setTime, reservationDatas }) => {
   let timeArray = [];
-  let tempTime = 0;
 
-  if (name !== "startTime") {
-    tempTime = startTime;
-  }
-  for (let i = tempTime; i < 24; i++) {
+  for (let i = 0; i < 24; i++) {
     timeArray.push(i);
   }
 
-  //   console.log(startTime);
+  const handleChange = e => {
+    if (name === 'startTime') {
+      let selectedTime = e.target.value;
+      setTime(selectedTime.slice(0, selectedTime.length - 2));
+    }
+  };
+
   return (
     <div>
-      <select
-        onChange={(e) => {
-          let selectedTime = e.target.value;
-          setTime(selectedTime.slice(0, selectedTime.length - 2));
-        }}
-      >
-        {timeArray.map((n) => {
-          //   return <option>{n}</option>;
-          return <option>{n < 12 ? `${n}AM` : `${n}PM`}</option>;
+      <select onChange={handleChange}>
+        {timeArray.map((time, idx) => {
+          const { start_time, end_time } = reservationDatas;
+          console.log(reservationDatas);
+          console.log(start_time, end_time);
+          return (
+            <option
+              key={idx}
+              selected={time === startTime ? true : false}
+              disabled={name === 'endTime' ? (time <= startTime ? true : false) : false}
+            >
+              {time < 12 ? `${time}AM` : `${time}PM`}
+            </option>
+          );
         })}
       </select>
     </div>

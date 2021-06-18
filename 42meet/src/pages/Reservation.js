@@ -1,41 +1,78 @@
-import React, { useState } from "react";
-import Timeline from "../Components/Timeline";
-import ReservationForm from "../Components/ReservationForm";
-import Navigation from "../Components/Navigation";
+import React, { useState, useEffect } from 'react';
+import Timeline from '../Components/Timeline';
+import ReservationForm from '../Components/ReservationForm';
+import Navigation from '../Components/Navigation';
+// import axios from 'axios';
+import { jsonToArray } from '../utils/utils';
 
 const Reservation = () => {
   const now = new Date();
-  const [selectedRoom, setSelectedRoom] = useState("");
+  const [reservationDatas, setReservationDatas] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(now.toISOString().substring(0, 10));
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState('');
 
-  let [selectedDate, setSelectedDate] = useState(
-    now.toISOString().substring(0, 10)
-  );
-  const minDate = new Date(now.setDate(now.getDate() + 7))
-    .toISOString()
-    .substring(0, 10);
-  const maxDate = new Date(now.setDate(now.getDate() + 14))
-    .toISOString()
-    .substring(0, 10);
+  const minDate = new Date(now.setDate(now.getDate() + 7)).toISOString().substring(0, 10);
+  const maxDate = new Date(now.setDate(now.getDate() + 14)).toISOString().substring(0, 10);
 
-  const onChange = (e) => {
-    setSelectedDate(e.target.value);
-    //axios
+  const getReservations = async () => {
+    try {
+      const response = {
+        0: {
+          room_type: '1층',
+          start_time: '3',
+          end_time: '5'
+        },
+        1: {
+          room_type: '3층',
+          start_time: '2',
+          end_time: '10'
+        }
+      };
+      // const response = {
+      //   '1층': {
+      //     start_time: '3',
+      //     end_time: '5'
+      //   }
+      // };
+      // const response = await axios.get('/reservation');
+      setReservationDatas(jsonToArray(response));
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const onChange = e => {
+    setSelectedDate(e.target.value);
+    getReservations();
+  };
+
+  // useEffect(() => {
+  //   getReservations();
+  // });
   return (
     <div>
       <Navigation />
       <input
-        type="date"
-        id="start"
-        name="Reservation"
+        type='date'
+        id='start'
+        name='Reservation'
         onChange={onChange}
         value={selectedDate}
         min={minDate}
         max={maxDate}
       ></input>
-      <Timeline setRoom={setSelectedRoom} />
-      <Timeline setRoom={setSelectedRoom} />
-      <ReservationForm selectedRoom={selectedRoom} />
+      <Timeline
+        setRoom={setSelectedRoom}
+        reservationDatas={reservationDatas}
+        setTime={setSelectedTime}
+      />
+      {/* <Timeline setRoom={setSelectedRoom} /> */}
+      <ReservationForm
+        selectedRoom={selectedRoom}
+        selectedTime={selectedTime}
+        reservationDatas={reservationDatas}
+      />
     </div>
   );
 };
