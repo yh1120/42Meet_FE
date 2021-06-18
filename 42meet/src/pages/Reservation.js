@@ -4,8 +4,8 @@ import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
 // import axios from 'axios';
 import { jsonToArray } from '../utils/utils';
-import Modal from "../Components/Modal/Modal";
-import ModalInput from "../Components/Modal/ModalInput";
+import Modal from '../Components/Modal/Modal';
+import ModalInput from '../Components/Modal/ModalInput';
 
 const Reservation = () => {
   const now = new Date();
@@ -13,7 +13,7 @@ const Reservation = () => {
   const [selectedDate, setSelectedDate] = useState(now.toISOString().substring(0, 10));
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedRoom, setSelectedRoom] = useState('');
-
+  const [modalOpen, setModalOpen] = useState(false);
   const minDate = new Date(now.setDate(now.getDate() + 7)).toISOString().substring(0, 10);
   const maxDate = new Date(now.setDate(now.getDate() + 14)).toISOString().substring(0, 10);
 
@@ -85,9 +85,9 @@ const Reservation = () => {
         reservationDatas={reservationDatas}
       />
       <button onClick={openModal}>모달팝업</button>
-      <Modal open={modalOpen} close={closeModal} header="Modal heading">
+      <Modal open={modalOpen} close={closeModal} header='Modal heading'>
         <ModalInput selectedDate={selectedDate} selectedRoom={selectedRoom} />
-      </Modal>          
+      </Modal>
     </div>
   );
 };
