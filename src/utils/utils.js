@@ -22,3 +22,10 @@ export const getHoursArray = () => {
   for (let i = 0; i < 24; i++) timeArray.push(i);
   return timeArray;
 };
+
+export const getAFewDaysLater = (days) => {
+  var date = new Date();
+  var dayOfMonth = date.getDate();
+  date.setDate(dayOfMonth + days);
+  return date;
+};
