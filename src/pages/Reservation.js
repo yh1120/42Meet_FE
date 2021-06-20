@@ -3,17 +3,12 @@ import axios from 'axios';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
-import { range } from '../utils/utils';
+import { range, getAFewDaysLater } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
 
 const Reservation = () => {
-  const now = new Date();
-  const minDate = new Date(now.setDate(now.getDate() + 7))
-    .toISOString()
-    .substring(0, 10);
-  const maxDate = new Date(now.setDate(now.getDate() + 14))
-    .toISOString()
-    .substring(0, 10);
+  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
+  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
   const rooms = ['1', '2', '3', '4', '5'];
 
   const [userInput, setUserInput] = useState({
