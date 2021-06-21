@@ -5,7 +5,9 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       // window.location.href = '/meeting/reservation';
-      const response = await axios.get('http://15.164.85.227:8080/login');
+      const response = await axios.get('http://15.164.85.227:8080/login', {
+        withCredentials: true,
+      });
       // const response = await axios.get('http://15.164.85.227:8080/member/login');
       console.log(response.headers);
     } catch (err) {
