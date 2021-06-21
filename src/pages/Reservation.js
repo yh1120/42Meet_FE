@@ -8,7 +8,6 @@ import Modal from '../Components/Modal/Modal';
 import jwtDecode from 'jwt-decode';
 
 const Reservation = () => {
-
   const minDate = getAFewDaysLater(7)
     .toISOString()
     .substring(0, 10);
@@ -25,6 +24,14 @@ const Reservation = () => {
       roomName: ['7클', '9클']
     }
   ];
+  // async () => {
+  //   const locationTable = await axios.get(
+  //     'http://15.164.85.227:8080/reservation/rooms',
+  //     {
+  //       Authorization: `Bearer ${localStorage.get('m_auth')}`
+  //     }
+  //   );
+  // };
 
   const [userInput, setUserInput] = useState({
     selectedDate: minDate,
@@ -34,13 +41,12 @@ const Reservation = () => {
     endTime: null,
     department: '',
     title: '',
-    purpose: '',
+    purpose: ''
   });
   const [reservationDatas, setReservationDatas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
-
 
   const getReservedTime = jsonArray => {
     const temp = {};
@@ -53,7 +59,10 @@ const Reservation = () => {
         const { location, roomName, start_time, end_time } = jsonArray[i];
         if (table.location === location)
           obj[roomName] = obj[roomName].concat(
-            range(parseInt(start_time), parseInt(end_time))
+            range(
+              parseInt(start_time.slice(0, 2)),
+              parseInt(end_time.slice(0, 2))
+            )
           );
       }
       temp[table.location] = obj;
@@ -61,9 +70,9 @@ const Reservation = () => {
     setReservedTime(temp);
   };
 
-  const getReservedInfo = async (newDate) => {
+  const getReservedInfo = async newDate => {
     try {
-      // const response = await axios.get('/reservation', {
+      // const response = await axios.get('http://15.164.85.227:8080/list?date={newDate}', {
       //   headers: {
       //     Authorization: `Bearer ${localStorage.get('m_auth')}`,
       //     date: newDate
@@ -74,21 +83,21 @@ const Reservation = () => {
         {
           location: '개포',
           roomName: '경복궁',
-          start_time: '1',
-          end_time: '5',
+          start_time: '01:00:00',
+          end_time: '05:00:00'
         },
         {
           location: '개포',
           roomName: '창경궁',
-          start_time: '2',
-          end_time: '3',
+          start_time: '02:00:00',
+          end_time: '03:00:00'
         },
         {
           location: '개포',
           roomName: '덕수궁',
-          start_time: '5',
-          end_time: '10',
-        },
+          start_time: '05:00:00',
+          end_time: '10:00:00'
+        }
       ];
       // setReservationDatas(jsonArray);
       // getReservedTime(jsonArray);
@@ -99,7 +108,7 @@ const Reservation = () => {
     }
   };
 
-  const onChange = (e) => {
+  const onChange = e => {
     setUserInput({ ...userInput, selectedDate: e.target.value });
     getReservedInfo();
   };
