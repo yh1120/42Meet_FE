@@ -7,9 +7,6 @@ import { range, getAFewDaysLater } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
 
 const Reservation = () => {
-  const today = getAFewDaysLater(0)
-    .toISOString()
-    .substring(0, 10);
   const minDate = getAFewDaysLater(7)
     .toISOString()
     .substring(0, 10);
@@ -19,7 +16,7 @@ const Reservation = () => {
   const rooms = ['1', '2', '3', '4', '5'];
 
   const [userInput, setUserInput] = useState({
-    selectedDate: today,
+    selectedDate: minDate,
     selectedRoom: '',
     startTime: null,
     endTime: null,
