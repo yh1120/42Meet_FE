@@ -3,16 +3,13 @@ import axios from 'axios';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
-import { range, getAFewDaysLater } from '../utils/utils';
+import { range, getAFewDaysLater, getCookieValue } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
+import jwtDecode from 'jwt-decode';
 
 const Reservation = () => {
-  const minDate = getAFewDaysLater(7)
-    .toISOString()
-    .substring(0, 10);
-  const maxDate = getAFewDaysLater(20)
-    .toISOString()
-    .substring(0, 10);
+  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
+  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
   const rooms = ['1', '2', '3', '4', '5'];
 
   const [userInput, setUserInput] = useState({
@@ -22,14 +19,14 @@ const Reservation = () => {
     endTime: null,
     department: '',
     title: '',
-    purpose: ''
+    purpose: '',
   });
   const [reservationDatas, setReservationDatas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
 
-  const getReservedTime = jsonArray => {
+  const getReservedTime = (jsonArray) => {
     let obj = {};
     for (let i = 0; i < rooms.length; i++) {
       obj[rooms[i]] = [];
@@ -43,7 +40,7 @@ const Reservation = () => {
     setReservedTime(obj);
   };
 
-  const getReservedInfo = async newDate => {
+  const getReservedInfo = async (newDate) => {
     try {
       // const response = await axios.get('/reservation', {
       //   headers: {
@@ -56,18 +53,18 @@ const Reservation = () => {
         {
           room_type: '1',
           start_time: '1',
-          end_time: '5'
+          end_time: '5',
         },
         {
           room_type: '3',
           start_time: '2',
-          end_time: '3'
+          end_time: '3',
         },
         {
           room_type: '3',
           start_time: '5',
-          end_time: '10'
-        }
+          end_time: '10',
+        },
       ];
       // setReservationDatas(jsonArray);
       // getReservedTime(jsonArray);
@@ -78,7 +75,7 @@ const Reservation = () => {
     }
   };
 
-  const onChange = e => {
+  const onChange = (e) => {
     setUserInput({ ...userInput, selectedDate: e.target.value });
     getReservedInfo();
   };
@@ -86,6 +83,14 @@ const Reservation = () => {
   useEffect(() => {
     getReservedInfo(userInput.selectedDate);
   }, [userInput.selectedDate]);
+
+  useEffect(() => {
+    if (getCookieValue('access_token') === '') {
+      window.location.href = '/meeting';
+    } else {
+      console.log(jwtDecode(getCookieValue('access_token')));
+    }
+  }, []);
 
   const openModal = () => {
     setModalOpen(true);

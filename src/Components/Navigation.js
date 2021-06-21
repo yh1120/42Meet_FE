@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   const handleLogout = () => {
+    // localStorage.removeItem('access_token');
     window.location.href = '/meeting';
   };
   return (
