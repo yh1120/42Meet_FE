@@ -7,25 +7,32 @@ import { range, getAFewDaysLater } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
 
 const Reservation = () => {
-  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
-  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
+  const today = getAFewDaysLater(0)
+    .toISOString()
+    .substring(0, 10);
+  const minDate = getAFewDaysLater(7)
+    .toISOString()
+    .substring(0, 10);
+  const maxDate = getAFewDaysLater(20)
+    .toISOString()
+    .substring(0, 10);
   const rooms = ['1', '2', '3', '4', '5'];
 
   const [userInput, setUserInput] = useState({
-    selectedDate: minDate,
+    selectedDate: today,
     selectedRoom: '',
     startTime: null,
     endTime: null,
     department: '',
     title: '',
-    purpose: '',
+    purpose: ''
   });
   const [reservationDatas, setReservationDatas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
 
-  const getReservedTime = (jsonArray) => {
+  const getReservedTime = jsonArray => {
     let obj = {};
     for (let i = 0; i < rooms.length; i++) {
       obj[rooms[i]] = [];
@@ -39,48 +46,49 @@ const Reservation = () => {
     setReservedTime(obj);
   };
 
-  const getReservedInfo = async () => {
+  const getReservedInfo = async newDate => {
     try {
+      // const response = await axios.get('/reservation', {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.get('m_auth')}`,
+      //     date: newDate
+      //   }
+      // });
+      // const jsonArray = jsonToArray(response);
       const response = [
         {
           room_type: '1',
-          start_time: '3',
-          end_time: '5',
+          start_time: '1',
+          end_time: '5'
         },
         {
           room_type: '3',
           start_time: '2',
-          end_time: '3',
+          end_time: '3'
         },
         {
           room_type: '3',
           start_time: '5',
-          end_time: '10',
-        },
+          end_time: '10'
+        }
       ];
-      // const response = await axios.get('/reservation', {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.get('m_auth')}`,
-      //   },
-      // });
-      // const jsonArray = jsonToArray(response);
       // setReservationDatas(jsonArray);
       // getReservedTime(jsonArray);
-      getReservedTime(response);
       setReservationDatas(response);
+      getReservedTime(response);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const onChange = (e) => {
+  const onChange = e => {
     setUserInput({ ...userInput, selectedDate: e.target.value });
     getReservedInfo();
   };
 
   useEffect(() => {
-    if (reservationDatas.length === 0) getReservedInfo();
-  });
+    getReservedInfo(userInput.selectedDate);
+  }, [userInput.selectedDate]);
 
   const openModal = () => {
     setModalOpen(true);
