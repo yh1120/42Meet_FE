@@ -8,12 +8,27 @@ import Modal from '../Components/Modal/Modal';
 import jwtDecode from 'jwt-decode';
 
 const Reservation = () => {
-  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
-  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
-  const rooms = ['1', '2', '3', '4', '5'];
+
+  const minDate = getAFewDaysLater(7)
+    .toISOString()
+    .substring(0, 10);
+  const maxDate = getAFewDaysLater(20)
+    .toISOString()
+    .substring(0, 10);
+  const locationTable = [
+    {
+      location: '개포',
+      roomName: ['경복궁', '창경궁', '덕수궁']
+    },
+    {
+      location: '서초',
+      roomName: ['7클', '9클']
+    }
+  ];
 
   const [userInput, setUserInput] = useState({
     selectedDate: minDate,
+    selectedLocation: '',
     selectedRoom: '',
     startTime: null,
     endTime: null,
@@ -26,18 +41,24 @@ const Reservation = () => {
   const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
 
-  const getReservedTime = (jsonArray) => {
-    let obj = {};
-    for (let i = 0; i < rooms.length; i++) {
-      obj[rooms[i]] = [];
-    }
-    for (let i = 0; i < jsonArray.length; i++) {
-      const { room_type, start_time, end_time } = jsonArray[i];
-      obj[room_type] = obj[room_type].concat(
-        range(parseInt(start_time), parseInt(end_time))
-      );
-    }
-    setReservedTime(obj);
+
+  const getReservedTime = jsonArray => {
+    const temp = {};
+    locationTable.map(table => {
+      let obj = {};
+      for (let i = 0; i < table.roomName.length; i++) {
+        obj[table.roomName[i]] = [];
+      }
+      for (let i = 0; i < jsonArray.length; i++) {
+        const { location, roomName, start_time, end_time } = jsonArray[i];
+        if (table.location === location)
+          obj[roomName] = obj[roomName].concat(
+            range(parseInt(start_time), parseInt(end_time))
+          );
+      }
+      temp[table.location] = obj;
+    });
+    setReservedTime(temp);
   };
 
   const getReservedInfo = async (newDate) => {
@@ -51,17 +72,20 @@ const Reservation = () => {
       // const jsonArray = jsonToArray(response);
       const response = [
         {
-          room_type: '1',
+          location: '개포',
+          roomName: '경복궁',
           start_time: '1',
           end_time: '5',
         },
         {
-          room_type: '3',
+          location: '개포',
+          roomName: '창경궁',
           start_time: '2',
           end_time: '3',
         },
         {
-          room_type: '3',
+          location: '개포',
+          roomName: '덕수궁',
           start_time: '5',
           end_time: '10',
         },
@@ -112,19 +136,31 @@ const Reservation = () => {
           min={minDate}
           max={maxDate}
         ></input>
-        <Timeline
-          userInput={userInput}
-          setUserInput={setUserInput}
-          meetingRooms={rooms}
-          reservedTime={reservedTime}
-        />
-        <ReservationForm
-          userInput={userInput}
-          setUserInput={setUserInput}
-          memberArray={memberArray}
-          setMemberArray={setMemberArray}
-          reservedTime={reservedTime}
-        />
+        {Object.keys(reservedTime).length !== 0 &&
+          locationTable.map(table => {
+            // console.log(reservedTime);
+            console.log(reservedTime[table.location]);
+            return (
+              <Timeline
+                userInput={userInput}
+                setUserInput={setUserInput}
+                location={table.location}
+                meetingRooms={table.roomName}
+                reservedTime={reservedTime[table.location]}
+              />
+            );
+          })}
+        {Object.keys(reservedTime).length !== 0 ? (
+          <ReservationForm
+            userInput={userInput}
+            setUserInput={setUserInput}
+            memberArray={memberArray}
+            setMemberArray={setMemberArray}
+            reservedTime={reservedTime[userInput.selectedLocation]}
+          />
+        ) : (
+          <></>
+        )}
         <button onClick={openModal}>예약하기</button>
         <Modal
           open={modalOpen}

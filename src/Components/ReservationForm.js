@@ -6,36 +6,39 @@ const ReservationForm = ({
   setUserInput,
   memberArray,
   setMemberArray,
-  reservedTime,
+  reservedTime
 }) => {
   const [memberInput, setMemberInput] = useState('');
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = e => {
     if (e.key === 'Enter' && memberInput !== '') {
       setMemberArray([...memberArray, memberInput]);
       setMemberInput('');
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setMemberInput(e.target.value);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setUserInput({
       ...userInput,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const i = parseInt(e.target.id);
     setMemberArray(memberArray.slice(0, i).concat(memberArray.slice(i + 1)));
   };
-
+  console.log('ReservationForm', reservedTime);
   return (
     <div>
-      <div>선택된 회의실 : [{userInput.selectedRoom}]</div>
+      <div>
+        선택된 회의실 : [{userInput.selectedLocation} - {userInput.selectedRoom}
+        ]
+      </div>
       <TimePicker
         name="startTime"
         userInput={userInput}
