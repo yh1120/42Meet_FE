@@ -1,11 +1,21 @@
 import React from 'react';
 import { getHoursArray } from '../utils/utils';
 
-const Timeline = ({ userInput, setUserInput, meetingRooms, reservedTime }) => {
+const Timeline = ({
+  userInput,
+  setUserInput,
+  location,
+  meetingRooms,
+  reservedTime
+}) => {
   const timeArray = getHoursArray();
 
-  const handleClick = (e) => {
-    setUserInput({ ...userInput, selectedRoom: e.target.innerText });
+  const handleClick = e => {
+    setUserInput({
+      ...userInput,
+      selectedRoom: e.target.innerText,
+      selectedLocation: location
+    });
   };
 
   return (
@@ -13,8 +23,8 @@ const Timeline = ({ userInput, setUserInput, meetingRooms, reservedTime }) => {
       <table border="4">
         <thead>
           <tr>
-            <th>회의실</th>
-            {timeArray.map((n) => {
+            <th>{location}</th>
+            {timeArray.map(n => {
               return <th key={n}>{n < 10 ? `0${n}` : n}</th>;
             })}
           </tr>
