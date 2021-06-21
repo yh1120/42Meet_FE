@@ -8,7 +8,7 @@ const Modal = (props) => {
   const submit = () => {
     //axios
     if (validate === true) {
-      window.location.href = '/mypage';
+      window.location.href = '/meeting/mypage';
     } else {
       close();
     }
