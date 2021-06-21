@@ -3,10 +3,12 @@ import axios from 'axios';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
-import { range, getAFewDaysLater } from '../utils/utils';
+import { range, getAFewDaysLater, getCookieValue } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
+import jwtDecode from 'jwt-decode';
 
 const Reservation = () => {
+
   const minDate = getAFewDaysLater(7)
     .toISOString()
     .substring(0, 10);
@@ -32,12 +34,13 @@ const Reservation = () => {
     endTime: null,
     department: '',
     title: '',
-    purpose: ''
+    purpose: '',
   });
   const [reservationDatas, setReservationDatas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
+
 
   const getReservedTime = jsonArray => {
     const temp = {};
@@ -58,7 +61,7 @@ const Reservation = () => {
     setReservedTime(temp);
   };
 
-  const getReservedInfo = async newDate => {
+  const getReservedInfo = async (newDate) => {
     try {
       // const response = await axios.get('/reservation', {
       //   headers: {
@@ -72,20 +75,20 @@ const Reservation = () => {
           location: '개포',
           roomName: '경복궁',
           start_time: '1',
-          end_time: '5'
+          end_time: '5',
         },
         {
           location: '개포',
           roomName: '창경궁',
           start_time: '2',
-          end_time: '3'
+          end_time: '3',
         },
         {
           location: '개포',
           roomName: '덕수궁',
           start_time: '5',
-          end_time: '10'
-        }
+          end_time: '10',
+        },
       ];
       // setReservationDatas(jsonArray);
       // getReservedTime(jsonArray);
@@ -96,7 +99,7 @@ const Reservation = () => {
     }
   };
 
-  const onChange = e => {
+  const onChange = (e) => {
     setUserInput({ ...userInput, selectedDate: e.target.value });
     getReservedInfo();
   };
@@ -104,6 +107,14 @@ const Reservation = () => {
   useEffect(() => {
     getReservedInfo(userInput.selectedDate);
   }, [userInput.selectedDate]);
+
+  useEffect(() => {
+    if (getCookieValue('access_token') === '') {
+      window.location.href = '/meeting';
+    } else {
+      console.log(jwtDecode(getCookieValue('access_token')));
+    }
+  }, []);
 
   const openModal = () => {
     setModalOpen(true);
