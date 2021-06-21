@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Reservation from './pages/Reservation';
 import MyPage from './pages/MyPage';
 import NotFound from './pages/NotFound';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   return (

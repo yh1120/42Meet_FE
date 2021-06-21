@@ -8,22 +8,17 @@ import Modal from '../Components/Modal/Modal';
 import jwtDecode from 'jwt-decode';
 
 const Reservation = () => {
-
-  const minDate = getAFewDaysLater(7)
-    .toISOString()
-    .substring(0, 10);
-  const maxDate = getAFewDaysLater(20)
-    .toISOString()
-    .substring(0, 10);
+  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
+  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
   const locationTable = [
     {
       location: '개포',
-      roomName: ['경복궁', '창경궁', '덕수궁']
+      roomName: ['경복궁', '창경궁', '덕수궁'],
     },
     {
       location: '서초',
-      roomName: ['7클', '9클']
-    }
+      roomName: ['7클', '9클'],
+    },
   ];
 
   const [userInput, setUserInput] = useState({
@@ -41,10 +36,9 @@ const Reservation = () => {
   const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
 
-
-  const getReservedTime = jsonArray => {
+  const getReservedTime = (jsonArray) => {
     const temp = {};
-    locationTable.map(table => {
+    locationTable.map((table) => {
       let obj = {};
       for (let i = 0; i < table.roomName.length; i++) {
         obj[table.roomName[i]] = [];
@@ -109,11 +103,13 @@ const Reservation = () => {
   }, [userInput.selectedDate]);
 
   useEffect(() => {
-    if (getCookieValue('access_token') === '') {
-      window.location.href = '/meeting';
-    } else {
+    // if (getCookieValue('access_token') === '') {
+    //   window.location.href = '/meeting';
+    // } else {
+    //   console.log(jwtDecode(getCookieValue('access_token')));
+    // }
+    if (getCookieValue('access_token') !== '')
       console.log(jwtDecode(getCookieValue('access_token')));
-    }
   }, []);
 
   const openModal = () => {
@@ -137,7 +133,7 @@ const Reservation = () => {
           max={maxDate}
         ></input>
         {Object.keys(reservedTime).length !== 0 &&
-          locationTable.map(table => {
+          locationTable.map((table) => {
             // console.log(reservedTime);
             console.log(reservedTime[table.location]);
             return (

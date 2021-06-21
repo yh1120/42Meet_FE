@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 
 const Navigation = () => {
   const handleLogout = () => {
@@ -8,9 +8,17 @@ const Navigation = () => {
   };
   return (
     <div>
-      <Link to="/meeting/reservation">예약 페이지</Link>
-      <Link to="/meeting/mypage">마이 페이지</Link>
-      <button onClick={handleLogout}>LogOut</button>
+      <Navbar bg="light" expand="lg">
+        <Navbar.Brand href="/meeting">42Meet</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="/meeting/reservation">Reservation</Nav.Link>
+            <Nav.Link href="/meeting/mypage">My Page</Nav.Link>
+          </Nav>
+          <Button onClick={handleLogout}>Logout</Button>
+        </Navbar.Collapse>
+      </Navbar>
     </div>
   );
 };
