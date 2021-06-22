@@ -3,14 +3,17 @@ import axios from 'axios';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
-import { range, getAFewDaysLater, getCookieValue } from '../utils/utils';
+import { range, getAFewDaysLater } from '../utils/utils';
 import Modal from '../Components/Modal';
-import jwtDecode from 'jwt-decode';
 import '../styles/Reservation.css';
 
 const Reservation = () => {
-  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
-  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
+  const minDate = getAFewDaysLater(7)
+    .toISOString()
+    .substring(0, 10);
+  const maxDate = getAFewDaysLater(20)
+    .toISOString()
+    .substring(0, 10);
 
   const [locations, setLocations] = useState([]);
   const [alreadyReservations, setAlreadyReservations] = useState([]);
@@ -23,7 +26,7 @@ const Reservation = () => {
     endTime: null,
     department: '',
     title: '',
-    purpose: '',
+    purpose: ''
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [memberArray, setMemberArray] = useState([]);
@@ -46,7 +49,7 @@ const Reservation = () => {
     }
   };
 
-  const onChange = async (e) => {
+  const onChange = async e => {
     setUserInput({ ...userInput, selectedDate: e.target.value });
     try {
       const response = await axios.get(
@@ -68,9 +71,9 @@ const Reservation = () => {
   };
 
   useEffect(() => {
-    const getReservedTime = (data) => {
+    const getReservedTime = data => {
       const temp = {};
-      locations.map((table) => {
+      locations.map(table => {
         let obj = {};
         for (let i = 0; i < table.roomName.length; i++) {
           obj[table.roomName[i]] = [];
@@ -94,6 +97,7 @@ const Reservation = () => {
 
   useEffect(() => {
     initRooms();
+    // console.log('token', jwtDecode(getCookieValue('access_token')).sub);
   }, []);
 
   return (
@@ -110,7 +114,7 @@ const Reservation = () => {
               max={maxDate}
             ></input>
           </div>
-          {locations.map((location) => {
+          {locations.map(location => {
             return (
               <>
                 <Timeline
