@@ -1,32 +1,34 @@
 import React from 'react';
 import { getHoursArray } from '../utils/utils';
+import { Table } from 'react-bootstrap';
+import '../styles/Timeline.css';
 
 const Timeline = ({
   userInput,
   setUserInput,
   location,
   meetingRooms,
-  reservedTime
+  reservedTime,
 }) => {
   const timeArray = getHoursArray();
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setUserInput({
       ...userInput,
       selectedRoom: e.target.innerText,
-      selectedLocation: location
+      selectedLocation: location,
     });
   };
 
   return (
-    <div>
-      <table border="4">
+    <div id="timeline-wrapper">
+      <Table responsive>
         <thead>
           <tr>
             <th>{location}</th>
-            {timeArray.map(n => {
-              return <th key={n}>{n < 10 ? `0${n}` : n}</th>;
-            })}
+            {Array.from({ length: 24 }).map((_, index) => (
+              <th key={index}>{index}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -39,12 +41,20 @@ const Timeline = ({
                     reservedTime[meetingRoom].indexOf(time) !== -1 ? (
                     <td
                       key={idx}
-                      style={{ backgroundColor: 'rgb(202, 211, 200)' }}
+                      style={{
+                        backgroundColor: 'rgb(202, 211, 200)',
+                        border: '1px solid black',
+                        padding: '2px',
+                      }}
                     ></td>
                   ) : (
                     <td
                       key={idx}
-                      style={{ backgroundColor: 'rgb(56, 103, 214)' }}
+                      style={{
+                        backgroundColor: 'white',
+                        border: '1px solid black',
+                        padding: '2px',
+                      }}
                     ></td>
                   );
                 })}
@@ -52,7 +62,7 @@ const Timeline = ({
             );
           })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };

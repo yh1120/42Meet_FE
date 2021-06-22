@@ -53,7 +53,7 @@ const MyPage = () => {
               <div
                 key={idx}
                 style={{
-                  border: '1px solid red',
+                  border: '1px solid black',
                   textAlign: 'center',
                   margin: '3px',
                 }}

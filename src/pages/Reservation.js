@@ -6,6 +6,7 @@ import Navigation from '../Components/Navigation';
 import { range, getAFewDaysLater, getCookieValue } from '../utils/utils';
 import Modal from '../Components/Modal/Modal';
 import jwtDecode from 'jwt-decode';
+import '../styles/Reservation.css';
 
 const Reservation = () => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
@@ -123,19 +124,19 @@ const Reservation = () => {
   const { selectedDate } = userInput;
   return (
     <div>
+      <Navigation />
       <div>
-        <Navigation />
-        <input
-          type="date"
-          onChange={onChange}
-          value={selectedDate}
-          min={minDate}
-          max={maxDate}
-        ></input>
+        <div id="datepicker-wrapper">
+          <input
+            type="date"
+            onChange={onChange}
+            value={selectedDate}
+            min={minDate}
+            max={maxDate}
+          ></input>
+        </div>
         {Object.keys(reservedTime).length !== 0 &&
           locationTable.map((table) => {
-            // console.log(reservedTime);
-            console.log(reservedTime[table.location]);
             return (
               <Timeline
                 userInput={userInput}
@@ -153,11 +154,11 @@ const Reservation = () => {
             memberArray={memberArray}
             setMemberArray={setMemberArray}
             reservedTime={reservedTime[userInput.selectedLocation]}
+            openModal={openModal}
           />
         ) : (
           <></>
         )}
-        <button onClick={openModal}>예약하기</button>
         <Modal
           open={modalOpen}
           close={closeModal}

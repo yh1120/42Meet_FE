@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { getCookieValue } from '../utils/utils';
+import { Button } from 'react-bootstrap';
+import '../styles/Login.css';
 
 const Login = () => {
   const handleLogin = async () => {
@@ -13,8 +15,10 @@ const Login = () => {
   });
 
   return (
-    <div>
-      <button onClick={handleLogin}>Log In</button>
+    <div id="login-wrapper" style={{}}>
+      <Button variant="dark" onClick={handleLogin}>
+        Log In
+      </Button>
     </div>
   );
 };
