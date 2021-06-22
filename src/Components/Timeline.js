@@ -37,7 +37,7 @@ const Timeline = ({
               <tr key={idx}>
                 <td onClick={handleClick}>{meetingRoom}</td>
                 {timeArray.map((time, idx) => {
-                  return reservedTime[meetingRoom] === undefined ||
+                  return reservedTime === undefined ||
                     reservedTime[meetingRoom].indexOf(time) !== -1 ? (
                     <td
                       key={idx}

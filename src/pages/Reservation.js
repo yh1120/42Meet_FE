@@ -4,24 +4,17 @@ import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
 import { range, getAFewDaysLater, getCookieValue } from '../utils/utils';
-import Modal from '../Components/Modal/Modal';
+import Modal from '../Components/Modal';
 import jwtDecode from 'jwt-decode';
 import '../styles/Reservation.css';
 
 const Reservation = () => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
   const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
-  const locationTable = [
-    {
-      location: '개포',
-      roomName: ['경복궁', '창경궁', '덕수궁'],
-    },
-    {
-      location: '서초',
-      roomName: ['7클', '9클'],
-    },
-  ];
 
+  const [locations, setLocations] = useState([]);
+  const [alreadyReservations, setAlreadyReservations] = useState([]);
+  const [reservedTime, setReservedTime] = useState([]);
   const [userInput, setUserInput] = useState({
     selectedDate: minDate,
     selectedLocation: '',
@@ -32,86 +25,39 @@ const Reservation = () => {
     title: '',
     purpose: '',
   });
-  const [reservationDatas, setReservationDatas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [reservedTime, setReservedTime] = useState({});
   const [memberArray, setMemberArray] = useState([]);
 
-  const getReservedTime = (jsonArray) => {
-    const temp = {};
-    locationTable.map((table) => {
-      let obj = {};
-      for (let i = 0; i < table.roomName.length; i++) {
-        obj[table.roomName[i]] = [];
-      }
-      for (let i = 0; i < jsonArray.length; i++) {
-        const { location, roomName, start_time, end_time } = jsonArray[i];
-        if (table.location === location)
-          obj[roomName] = obj[roomName].concat(
-            range(parseInt(start_time), parseInt(end_time))
-          );
-      }
-      temp[table.location] = obj;
-    });
-    setReservedTime(temp);
-  };
-
-  const getReservedInfo = async (newDate) => {
+  const initRooms = async () => {
     try {
-      // const response = await axios.get('/reservation', {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.get('m_auth')}`,
-      //     date: newDate
-      //   }
-      // });
-      // const jsonArray = jsonToArray(response);
-      const response = [
-        {
-          location: '개포',
-          roomName: '경복궁',
-          start_time: '1',
-          end_time: '5',
-        },
-        {
-          location: '개포',
-          roomName: '창경궁',
-          start_time: '2',
-          end_time: '3',
-        },
-        {
-          location: '개포',
-          roomName: '덕수궁',
-          start_time: '5',
-          end_time: '10',
-        },
-      ];
-      // setReservationDatas(jsonArray);
-      // getReservedTime(jsonArray);
-      setReservationDatas(response);
-      getReservedTime(response);
+      const rooms_res = await axios.get('http://15.164.85.227:8081/rooms');
+      setLocations(rooms_res.data);
+      try {
+        const reservation_res = await axios.get(
+          `http://15.164.85.227:8081/list?date=${userInput.selectedDate}`
+        );
+
+        setAlreadyReservations(reservation_res.data);
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const onChange = (e) => {
+  const onChange = async (e) => {
     setUserInput({ ...userInput, selectedDate: e.target.value });
-    getReservedInfo();
+    try {
+      const response = await axios.get(
+        `http://15.164.85.227:8081/list?date=${e.target.value}`
+      );
+      console.log(response.data);
+      setAlreadyReservations(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
-
-  useEffect(() => {
-    getReservedInfo(userInput.selectedDate);
-  }, [userInput.selectedDate]);
-
-  useEffect(() => {
-    // if (getCookieValue('access_token') === '') {
-    //   window.location.href = '/meeting';
-    // } else {
-    //   console.log(jwtDecode(getCookieValue('access_token')));
-    // }
-    if (getCookieValue('access_token') !== '')
-      console.log(jwtDecode(getCookieValue('access_token')));
-  }, []);
 
   const openModal = () => {
     setModalOpen(true);
@@ -121,33 +67,62 @@ const Reservation = () => {
     setModalOpen(false);
   };
 
-  const { selectedDate } = userInput;
+  useEffect(() => {
+    const getReservedTime = (data) => {
+      const temp = {};
+      locations.map((table) => {
+        let obj = {};
+        for (let i = 0; i < table.roomName.length; i++) {
+          obj[table.roomName[i]] = [];
+        }
+        for (let i = 0; i < data.length; i++) {
+          const { location, roomName, startTime, endTime } = data[i];
+          if (table.location === location)
+            obj[roomName] = obj[roomName].concat(
+              range(
+                parseInt(startTime.slice(0, 2)),
+                parseInt(endTime.slice(0, 2))
+              )
+            );
+        }
+        temp[table.location] = obj;
+      });
+      setReservedTime(temp);
+    };
+    getReservedTime(alreadyReservations);
+  }, [locations, alreadyReservations]);
+
+  useEffect(() => {
+    initRooms();
+  }, []);
+
   return (
-    <div>
-      <Navigation />
+    <>
       <div>
-        <div id="datepicker-wrapper">
-          <input
-            type="date"
-            onChange={onChange}
-            value={selectedDate}
-            min={minDate}
-            max={maxDate}
-          ></input>
-        </div>
-        {Object.keys(reservedTime).length !== 0 &&
-          locationTable.map((table) => {
+        <Navigation />
+        <div>
+          <div id="datepicker-wrapper">
+            <input
+              type="date"
+              onChange={onChange}
+              value={userInput.selectedDate}
+              min={minDate}
+              max={maxDate}
+            ></input>
+          </div>
+          {locations.map((location) => {
             return (
-              <Timeline
-                userInput={userInput}
-                setUserInput={setUserInput}
-                location={table.location}
-                meetingRooms={table.roomName}
-                reservedTime={reservedTime[table.location]}
-              />
+              <>
+                <Timeline
+                  userInput={userInput}
+                  setUserInput={setUserInput}
+                  location={location.location}
+                  meetingRooms={location.roomName}
+                  reservedTime={reservedTime[location.location]}
+                />
+              </>
             );
           })}
-        {Object.keys(reservedTime).length !== 0 ? (
           <ReservationForm
             userInput={userInput}
             setUserInput={setUserInput}
@@ -156,18 +131,16 @@ const Reservation = () => {
             reservedTime={reservedTime[userInput.selectedLocation]}
             openModal={openModal}
           />
-        ) : (
-          <></>
-        )}
-        <Modal
-          open={modalOpen}
-          close={closeModal}
-          header="Modal heading"
-          userInput={userInput}
-          members={memberArray}
-        ></Modal>
+          <Modal
+            open={modalOpen}
+            close={closeModal}
+            header="Modal heading"
+            userInput={userInput}
+            members={memberArray}
+          ></Modal>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

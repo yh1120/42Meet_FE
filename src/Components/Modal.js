@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
-import './Modal.css';
+import React from 'react';
+import axios from 'axios';
+import { setTimeFormat } from '../utils/utils';
+import '../styles/Modal.css';
 
-const Modal = (props) => {
+const Modal = ({ open, close, header, userInput, members }) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-  const { open, close, header, userInput, members } = props;
-  const [validate, setValidate] = useState(true);
-  const submit = () => {
-    //axios
-    if (validate === true) {
-      window.location.href = '/meeting/mypage';
-    } else {
-      close();
-    }
-  };
   const {
+    selectedLocation,
     selectedDate,
     selectedRoom,
     startTime,
@@ -32,6 +25,7 @@ const Modal = (props) => {
     '사용목적',
     '팀원',
   ];
+
   const values = {
     [infos[0]]: selectedDate,
     [infos[1]]: selectedRoom,
@@ -48,6 +42,30 @@ const Modal = (props) => {
     ) : (
       '없음'
     ),
+  };
+
+  const submit = async () => {
+    try {
+      const response = await axios.post('http://15.164.85.227:8081/register', {
+        // Authorization: `Bearer ${localStorage.get('m_auth')}`,
+        location: selectedLocation,
+        roomName: selectedRoom,
+        date: selectedDate,
+        startTime: setTimeFormat(startTime),
+        endTime: setTimeFormat(endTime),
+        leaderName: 'taehkim',
+        department: department,
+        purpose: purpose,
+        title: title,
+        content: 'content',
+        members: members,
+      });
+      window.location.href = '/meeting/mypage';
+    } catch (err) {
+      if (err.statusCode === 400) {
+        close();
+      }
+    }
   };
 
   return (
