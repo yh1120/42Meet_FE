@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { setTimeFormat } from '../utils/utils';
 import '../styles/Modal.css';
+import jwtDecode from 'jwt-decode';
+import { getCookieValue } from '../utils/utils';
 
 const Modal = ({ open, close, header, userInput, members }) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
@@ -13,7 +15,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
     endTime,
     department,
     title,
-    purpose,
+    purpose
   } = userInput;
 
   const infos = [
@@ -23,7 +25,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
     '소속',
     '행사명',
     '사용목적',
-    '팀원',
+    '팀원'
   ];
 
   const values = {
@@ -41,7 +43,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
       </ul>
     ) : (
       '없음'
-    ),
+    )
   };
 
   const submit = async () => {
@@ -53,12 +55,12 @@ const Modal = ({ open, close, header, userInput, members }) => {
         date: selectedDate,
         startTime: setTimeFormat(startTime),
         endTime: setTimeFormat(endTime),
-        leaderName: 'taehkim',
+        leaderName: jwtDecode(getCookieValue('access_token')).sub,
         department: department,
         purpose: purpose,
         title: title,
         content: 'content',
-        members: members,
+        members: members
       });
       window.location.href = '/meeting/mypage';
     } catch (err) {
