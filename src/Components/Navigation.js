@@ -16,7 +16,9 @@ const Navigation = () => {
             <Nav.Link href="/meeting/reservation">Reservation</Nav.Link>
             <Nav.Link href="/meeting/mypage">My Page</Nav.Link>
           </Nav>
-          <Button onClick={handleLogout}>Logout</Button>
+          <Button variant="dark" onClick={handleLogout}>
+            Logout
+          </Button>
         </Navbar.Collapse>
       </Navbar>
     </div>
