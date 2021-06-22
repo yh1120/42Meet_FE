@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
 import './Modal.css';
 
-const Modal = (props) => {
+const Modal = props => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
   const { open, close, header, userInput, members } = props;
   const [validate, setValidate] = useState(true);
-  const submit = () => {
-    //axios
+  const submit = async () => {
+    const statusCode = await axios.get(
+      'http://15.164.85.227:8080/reservation/register',
+      {
+        Authorization: `Bearer ${localStorage.get('m_auth')}`,
+        location: '개포',
+        roomName: '유튜브스튜디오 1층',
+        date: '2021-06-27',
+        startTime: '17:00:00',
+        endTime: '18:00:00',
+        leaderName: 'taehkim',
+        department: '42Seoul',
+        purpose: '알고리즘 스터디',
+        title: '취업폭주기관차',
+        content: '아무내용입니다.',
+        members: ['sebaek', 'jakang', 'esim', 'good']
+      }
+    );
     if (validate === true) {
       window.location.href = '/meeting/mypage';
     } else {
@@ -20,7 +36,7 @@ const Modal = (props) => {
     endTime,
     department,
     title,
-    purpose,
+    purpose
   } = userInput;
 
   const infos = [
@@ -30,7 +46,7 @@ const Modal = (props) => {
     '소속',
     '행사명',
     '사용목적',
-    '팀원',
+    '팀원'
   ];
   const values = {
     [infos[0]]: selectedDate,
@@ -47,7 +63,7 @@ const Modal = (props) => {
       </ul>
     ) : (
       '없음'
-    ),
+    )
   };
 
   return (

@@ -15,6 +15,7 @@ const Reservation = () => {
   // const [rooms, setRooms] = useState([]);
   const [locations, setLocations] = useState([]);
   const [alreadyReservations, setAlreadyReservations] = useState([]);
+
   const [userInput, setUserInput] = useState({
     selectedDate: minDate,
     selectedLocation: '',
@@ -52,7 +53,10 @@ const Reservation = () => {
         const { location, roomName, start_time, end_time } = data[i];
         if (table.location === location)
           obj[roomName] = obj[roomName].concat(
-            range(parseInt(start_time), parseInt(end_time))
+            range(
+              parseInt(start_time.slice(0, 2)),
+              parseInt(end_time.slice(0, 2))
+            )
           );
       }
       temp[table.location] = obj;
