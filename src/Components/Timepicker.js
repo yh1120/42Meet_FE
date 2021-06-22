@@ -32,7 +32,6 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
               key={idx}
               disabled={
                 reservedTime === undefined ||
-                // reservedTime[selectedRoom] === undefined ||
                 reservedTime[selectedRoom].indexOf(time) !== -1
                   ? true
                   : false

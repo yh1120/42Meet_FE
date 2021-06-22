@@ -46,7 +46,6 @@ const ReservationForm = ({
     const i = parseInt(e.target.id);
     setMemberArray(memberArray.slice(0, i).concat(memberArray.slice(i + 1)));
   };
-  console.log('ReservationForm', reservedTime);
   const classes = useStyles();
   return (
     <div
