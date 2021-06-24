@@ -72,7 +72,6 @@ const ReservationForm = ({
         ></TimePicker>
       </div>
       <TextField
-        id="standard-basic"
         label="소속"
         variant="outlined"
         size="small"
@@ -81,7 +80,6 @@ const ReservationForm = ({
         onChange={handleInputChange}
       />
       <TextField
-        id="standard-basic"
         label="행사명"
         variant="outlined"
         size="small"
@@ -90,7 +88,6 @@ const ReservationForm = ({
         onChange={handleInputChange}
       />
       <TextField
-        id="standard-basic"
         label="사용 목적"
         variant="outlined"
         size="small"
@@ -99,7 +96,7 @@ const ReservationForm = ({
         onChange={handleInputChange}
       />
       <TextField
-        id="standard-basic"
+        // id="standard-basic"
         label="팀원을 입력해주세요"
         variant="outlined"
         size="small"
