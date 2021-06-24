@@ -45,14 +45,15 @@ export const getCookieValue = (key) => {
   return result;
 };
 
-export const setTimeFormat = (hour) => {
+export const setTimeFormat = (hour, mode = 'start') => {
   let result;
 
   if (hour < 10) {
-    result = `0${hour}:00:00`;
+    if (mode === 'start') result = `0${hour}:00:00`;
+    else result = `0${hour - 1}:59:59`;
   } else {
-    result = `${hour}:00:00`;
+    if (mode === 'start') result = `${hour}:00:00`;
+    else result = `${hour - 1}:59:59`;
   }
-
   return result;
 };

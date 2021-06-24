@@ -15,7 +15,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
     endTime,
     department,
     title,
-    purpose
+    purpose,
   } = userInput;
 
   const infos = [
@@ -25,7 +25,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
     '소속',
     '행사명',
     '사용목적',
-    '팀원'
+    '팀원',
   ];
 
   const values = {
@@ -43,7 +43,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
       </ul>
     ) : (
       '없음'
-    )
+    ),
   };
 
   const submit = async () => {
@@ -53,14 +53,14 @@ const Modal = ({ open, close, header, userInput, members }) => {
         location: selectedLocation,
         roomName: selectedRoom,
         date: selectedDate,
-        startTime: setTimeFormat(startTime),
-        endTime: setTimeFormat(endTime),
+        startTime: setTimeFormat(startTime, 'start'),
+        endTime: setTimeFormat(endTime, 'end'),
         leaderName: jwtDecode(getCookieValue('access_token')).sub,
         department: department,
         purpose: purpose,
         title: title,
         content: 'content',
-        members: members
+        members: members,
       });
       window.location.href = '/meeting/mypage';
     } catch (err) {
