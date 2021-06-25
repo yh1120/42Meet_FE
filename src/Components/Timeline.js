@@ -22,12 +22,14 @@ const Timeline = ({
 
   return (
     <div id="timeline-wrapper">
-      <Table responsive>
+      <Table responsive size="sm">
         <thead>
           <tr>
-            <th>{location}</th>
+            <th style={{ width: '7%', textAlign: 'center' }}>{location}</th>
             {Array.from({ length: 24 }).map((_, index) => (
-              <th key={index}>{index}</th>
+              <th key={index} style={{ textAlign: 'center', width: '3%' }}>
+                {index}
+              </th>
             ))}
           </tr>
         </thead>
@@ -35,7 +37,12 @@ const Timeline = ({
           {meetingRooms.map((meetingRoom, idx) => {
             return (
               <tr key={idx}>
-                <td onClick={handleClick}>{meetingRoom}</td>
+                <td
+                  onClick={handleClick}
+                  style={{ height: '30px', textAlign: 'center' }}
+                >
+                  {meetingRoom}
+                </td>
                 {timeArray.map((time, idx) => {
                   return reservedTime === undefined ||
                     reservedTime[meetingRoom].indexOf(time) !== -1 ? (
@@ -44,7 +51,7 @@ const Timeline = ({
                       style={{
                         backgroundColor: 'rgb(202, 211, 200)',
                         border: '1px solid black',
-                        padding: '2px',
+                        padding: '1px',
                       }}
                     ></td>
                   ) : (
@@ -53,7 +60,7 @@ const Timeline = ({
                       style={{
                         backgroundColor: 'white',
                         border: '1px solid black',
-                        padding: '2px',
+                        padding: '1px',
                       }}
                     ></td>
                   );
