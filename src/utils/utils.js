@@ -48,12 +48,15 @@ export const getCookieValue = (key) => {
 export const setTimeFormat = (hour, mode = 'start') => {
   let result;
 
+  if (mode === 'end') hour = (((hour - 1) % 23) + 24) % 24;
+
   if (hour < 10) {
     if (mode === 'start') result = `0${hour}:00:00`;
-    else result = `0${hour - 1}:59:59`;
+    else result = `0${hour}:59:59`;
   } else {
     if (mode === 'start') result = `${hour}:00:00`;
-    else result = `${hour - 1}:59:59`;
+    else result = `${hour}:59:59`;
   }
+
   return result;
 };
