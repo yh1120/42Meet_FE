@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { setTimeFormat } from '../utils/utils';
+import { getHeaders, setTimeFormat, getCookieValue } from '../utils/utils';
 import '../styles/Modal.css';
 import jwtDecode from 'jwt-decode';
-import { getCookieValue } from '../utils/utils';
 
 const Modal = ({ open, close, header, userInput, members }) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
@@ -48,20 +47,31 @@ const Modal = ({ open, close, header, userInput, members }) => {
 
   const submit = async () => {
     try {
-      const response = await axios.post('http://15.164.85.227:8081/register', {
-        // Authorization: `Bearer ${localStorage.get('m_auth')}`,
-        location: selectedLocation,
-        roomName: selectedRoom,
-        date: selectedDate,
-        startTime: setTimeFormat(startTime, 'start'),
-        endTime: setTimeFormat(endTime, 'end'),
-        leaderName: jwtDecode(getCookieValue('access_token')).sub,
-        department: department,
-        purpose: purpose,
-        title: title,
-        content: 'content',
-        members: members,
-      });
+      console.log('click');
+      const response = await axios.post(
+        'http://15.164.85.227:8081/register',
+        {
+          // Authorization: `Bearer ${localStorage.get('m_auth')}`,
+          location: selectedLocation,
+          roomName: selectedRoom,
+          date: selectedDate,
+          startTime: setTimeFormat(startTime, 'start'),
+          endTime: setTimeFormat(endTime, 'end'),
+          leaderName: jwtDecode(getCookieValue('access_token')).sub,
+          department: department,
+          purpose: purpose,
+          title: title,
+          content: 'content',
+          members: members,
+        },
+        { headers: getHeaders() }
+      );
+      let access_token = response.headers['access-token'];
+      let refresh_token = response.headers['refresh-token'];
+      if (access_token) {
+        localStorage.setItem('access-token', access_token);
+        localStorage.setItem('refresh-token', refresh_token);
+      }
       window.location.href = '/meeting/mypage';
     } catch (err) {
       if (err.statusCode === 400) {
