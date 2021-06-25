@@ -8,12 +8,8 @@ import Modal from '../Components/Modal';
 import '../styles/Reservation.css';
 
 const Reservation = () => {
-  const minDate = getAFewDaysLater(7)
-    .toISOString()
-    .substring(0, 10);
-  const maxDate = getAFewDaysLater(20)
-    .toISOString()
-    .substring(0, 10);
+  const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
+  const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
 
   const [locations, setLocations] = useState([]);
   const [alreadyReservations, setAlreadyReservations] = useState([]);
@@ -26,7 +22,7 @@ const Reservation = () => {
     endTime: null,
     department: '',
     title: '',
-    purpose: ''
+    purpose: '',
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [memberArray, setMemberArray] = useState([]);
@@ -39,7 +35,6 @@ const Reservation = () => {
         const reservation_res = await axios.get(
           `http://15.164.85.227:8081/list?date=${userInput.selectedDate}`
         );
-
         setAlreadyReservations(reservation_res.data);
       } catch (err) {
         console.log(err);
@@ -49,14 +44,21 @@ const Reservation = () => {
     }
   };
 
-  const onChange = async e => {
-    setUserInput({ ...userInput, selectedDate: e.target.value });
+  const onChange = async (e) => {
+    const selectedDate = e.target.value;
     try {
       const response = await axios.get(
-        `http://15.164.85.227:8081/list?date=${e.target.value}`
+        `http://15.164.85.227:8081/list?date=${selectedDate}`
       );
-      console.log(response.data);
       setAlreadyReservations(response.data);
+      setUserInput({
+        ...userInput,
+        selectedDate: selectedDate,
+        selectedLocation: '',
+        selectedRoom: '',
+        startTime: null,
+        endTime: null,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -71,9 +73,9 @@ const Reservation = () => {
   };
 
   useEffect(() => {
-    const getReservedTime = data => {
+    const getReservedTime = (data) => {
       const temp = {};
-      locations.map(table => {
+      locations.forEach((table) => {
         let obj = {};
         for (let i = 0; i < table.roomName.length; i++) {
           obj[table.roomName[i]] = [];
@@ -84,7 +86,7 @@ const Reservation = () => {
             obj[roomName] = obj[roomName].concat(
               range(
                 parseInt(startTime.slice(0, 2)),
-                parseInt(endTime.slice(0, 2))
+                parseInt(endTime.slice(0, 2)) + 1
               )
             );
         }
@@ -114,17 +116,16 @@ const Reservation = () => {
               max={maxDate}
             ></input>
           </div>
-          {locations.map(location => {
+          {locations.map((location, idx) => {
             return (
-              <>
-                <Timeline
-                  userInput={userInput}
-                  setUserInput={setUserInput}
-                  location={location.location}
-                  meetingRooms={location.roomName}
-                  reservedTime={reservedTime[location.location]}
-                />
-              </>
+              <Timeline
+                key={idx}
+                userInput={userInput}
+                setUserInput={setUserInput}
+                location={location.location}
+                meetingRooms={location.roomName}
+                reservedTime={reservedTime[location.location]}
+              />
             );
           })}
           <ReservationForm
