@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { getHeaders, setTimeFormat, getCookieValue } from '../utils/utils';
+import { getHeaders, setTimeFormat } from '../utils/utils';
 import '../styles/Modal.css';
 import jwtDecode from 'jwt-decode';
 
@@ -47,17 +47,15 @@ const Modal = ({ open, close, header, userInput, members }) => {
 
   const submit = async () => {
     try {
-      console.log('click');
       const response = await axios.post(
         'http://15.164.85.227:8081/register',
         {
-          // Authorization: `Bearer ${localStorage.get('m_auth')}`,
           location: selectedLocation,
           roomName: selectedRoom,
           date: selectedDate,
           startTime: setTimeFormat(startTime, 'start'),
           endTime: setTimeFormat(endTime, 'end'),
-          leaderName: jwtDecode(getCookieValue('access_token')).sub,
+          leaderName: jwtDecode(localStorage.getItem('access-token')).sub,
           department: department,
           purpose: purpose,
           title: title,
