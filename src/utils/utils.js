@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode';
+
 export const jsonToArray = (json) => {
   const arr = [];
 
@@ -59,4 +61,29 @@ export const setTimeFormat = (hour, mode = 'start') => {
   }
 
   return result;
+};
+
+export const isExpiredJwt = (key) => {
+  let value = localStorage.getItem(key);
+
+  // 만료 기한이 10분 이내로 남았을 경우, true를 리턴함.
+  if (new Date(jwtDecode(value).exp * 1000) - new Date() < 1200 * 600)
+    return true;
+  return false;
+};
+
+const req_headers = {
+  'access-token': localStorage.getItem('access-token'),
+};
+
+const req_refresh_headers = {
+  'access-token': localStorage.getItem('access-token'),
+  'refresh-token': localStorage.getItem('refresh-token'),
+};
+
+export const getHeaders = () => {
+  let headers = !isExpiredJwt('access-token')
+    ? req_headers
+    : req_refresh_headers;
+  return headers;
 };

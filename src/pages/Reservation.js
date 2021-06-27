@@ -3,9 +3,16 @@ import axios from 'axios';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
-import { range, getAFewDaysLater } from '../utils/utils';
+import {
+  range,
+  getAFewDaysLater,
+  getCookieValue,
+  getHeaders,
+} from '../utils/utils';
 import Modal from '../Components/Modal';
 import '../styles/Reservation.css';
+
+// eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjQyNzk0NjYsImV4cCI6MTYyNjg3MTQ2Niwic3ViIjoiZXNpbSJ9.RaaFIFUN8Iqs26XioCiAjRDSQUgeqBK_wrYnckZSUOU
 
 const Reservation = () => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
@@ -29,13 +36,22 @@ const Reservation = () => {
 
   const initRooms = async () => {
     try {
-      const rooms_res = await axios.get('http://15.164.85.227:8081/rooms');
+      const rooms_res = await axios.get('http://15.164.85.227:8081/rooms', {
+        headers: getHeaders(),
+      });
       setLocations(rooms_res.data);
       try {
         const reservation_res = await axios.get(
-          `http://15.164.85.227:8081/list?date=${userInput.selectedDate}`
+          `http://15.164.85.227:8081/list?date=${userInput.selectedDate}`,
+          { headers: getHeaders() }
         );
         setAlreadyReservations(reservation_res.data);
+        let access_token = reservation_res.headers['access-token'];
+        let refresh_token = reservation_res.headers['refresh-token'];
+        if (access_token) {
+          localStorage.setItem('access-token', access_token);
+          localStorage.setItem('refresh-token', refresh_token);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -48,7 +64,8 @@ const Reservation = () => {
     const selectedDate = e.target.value;
     try {
       const response = await axios.get(
-        `http://15.164.85.227:8081/list?date=${selectedDate}`
+        `http://15.164.85.227:8081/list?date=${selectedDate}`,
+        { headers: getHeaders() }
       );
       setAlreadyReservations(response.data);
       setUserInput({
@@ -59,6 +76,12 @@ const Reservation = () => {
         startTime: null,
         endTime: null,
       });
+      let access_token = response.headers['access-token'];
+      let refresh_token = response.headers['refresh-token'];
+      if (access_token) {
+        localStorage.setItem('access-token', access_token);
+        localStorage.setItem('refresh-token', refresh_token);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -98,6 +121,21 @@ const Reservation = () => {
   }, [locations, alreadyReservations]);
 
   useEffect(() => {
+    let access_token = getCookieValue('access-token');
+    let refresh_token = getCookieValue('refresh-token');
+
+    if (access_token && refresh_token) {
+      localStorage.setItem('access-token', access_token);
+      localStorage.setItem('refresh-token', refresh_token);
+      document.cookie = 'access-token=; path=/; max-age=0';
+      document.cookie = 'refresh-token=; path=/; max-age=0';
+    } else if (
+      !localStorage.getItem('access-token') ||
+      !localStorage.getItem('refresh-token')
+    ) {
+      localStorage.clear();
+      window.location.href = '/meeting';
+    }
     initRooms();
     // console.log('token', jwtDecode(getCookieValue('access_token')).sub);
   }, []);

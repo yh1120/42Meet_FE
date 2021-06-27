@@ -10,8 +10,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log(getCookieValue('access_token'));
-    // if (getCookieValue('access_token') !== '')
+    console.log(getCookieValue('access-token'));
+    // if (getCookieValue('access-token') !== '')
     //   window.location.href = '/meeting/reservation';
   });
 
