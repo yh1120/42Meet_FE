@@ -8,6 +8,7 @@ import {
   getAFewDaysLater,
   getCookieValue,
   getHeaders,
+  setToken,
 } from '../utils/utils';
 import Modal from '../Components/Modal';
 import '../styles/Reservation.css';
@@ -46,12 +47,7 @@ const Reservation = () => {
           { headers: getHeaders() }
         );
         setAlreadyReservations(reservation_res.data);
-        let access_token = reservation_res.headers['access-token'];
-        let refresh_token = reservation_res.headers['refresh-token'];
-        if (access_token) {
-          localStorage.setItem('access-token', access_token);
-          localStorage.setItem('refresh-token', refresh_token);
-        }
+        setToken(reservation_res);
       } catch (err) {
         console.log(err);
       }
@@ -76,12 +72,7 @@ const Reservation = () => {
         startTime: null,
         endTime: null,
       });
-      let access_token = response.headers['access-token'];
-      let refresh_token = response.headers['refresh-token'];
-      if (access_token) {
-        localStorage.setItem('access-token', access_token);
-        localStorage.setItem('refresh-token', refresh_token);
-      }
+      setToken(response);
     } catch (err) {
       console.log(err);
     }
