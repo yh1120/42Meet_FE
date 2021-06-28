@@ -1,6 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { getHeaders, setTimeFormat, getCookieValue } from '../utils/utils';
+import {
+  getHeaders,
+  setTimeFormat,
+  setToken,
+  getCookieValue,
+} from '../utils/utils';
 import '../styles/Modal.css';
 import jwtDecode from 'jwt-decode';
 
@@ -66,12 +71,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
         },
         { headers: getHeaders() }
       );
-      let access_token = response.headers['access-token'];
-      let refresh_token = response.headers['refresh-token'];
-      if (access_token) {
-        localStorage.setItem('access-token', access_token);
-        localStorage.setItem('refresh-token', refresh_token);
-      }
+      setToken(response);
       window.location.href = '/meeting/mypage';
     } catch (err) {
       if (err.statusCode === 400) {

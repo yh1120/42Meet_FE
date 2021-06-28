@@ -87,3 +87,12 @@ export const getHeaders = () => {
     : req_refresh_headers;
   return headers;
 };
+
+export const setToken = (response) => {
+  let access_token = response.headers['access-token'];
+  let refresh_token = response.headers['refresh-token'];
+  if (access_token) {
+    localStorage.setItem('access-token', access_token);
+    localStorage.setItem('refresh-token', refresh_token);
+  }
+};
