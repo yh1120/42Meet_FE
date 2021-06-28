@@ -67,7 +67,7 @@ const MyPage = () => {
               startTime,
               endTime,
               roomName,
-              participate,
+              members,
               leaderName,
               id,
             } = reservation;
@@ -88,7 +88,7 @@ const MyPage = () => {
                 <div>leaderName: {leaderName}</div>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   members: [
-                  {participate.map((member, m_idx) => {
+                  {members.map((member, m_idx) => {
                     return <div key={m_idx}>{member} </div>;
                   })}
                   ]
