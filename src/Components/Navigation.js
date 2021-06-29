@@ -1,11 +1,13 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 
-const Navigation = () => {
+const Navigation = ({ history }) => {
   const handleLogout = () => {
-    // localStorage.removeItem('access_token');
-    window.location.href = '/';
+    // localStorage.clear();
+    history.push('/');
   };
+
   return (
     <div>
       <Navbar bg="light" expand="lg">
@@ -25,4 +27,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default withRouter(Navigation);

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import '../styles/Login.css';
 
-const Login = () => {
+const Login = ({ history }) => {
   const handleLogin = async () => {
     window.location.href = 'http://15.164.85.227:8080/login';
     // window.location.href = 'http://42meet.kro.kr/member/login';
@@ -13,7 +14,7 @@ const Login = () => {
       localStorage.getItem('access-token') &&
       localStorage.getItem('refresh-token')
     ) {
-      window.location.href = '/booking';
+      history.push('/booking');
     }
   });
 
@@ -26,4 +27,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);
