@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
@@ -13,9 +14,7 @@ import {
 import Modal from '../Components/Modal';
 import '../styles/Reservation.css';
 
-// eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjQyNzk0NjYsImV4cCI6MTYyNjg3MTQ2Niwic3ViIjoiZXNpbSJ9.RaaFIFUN8Iqs26XioCiAjRDSQUgeqBK_wrYnckZSUOU
-
-const Reservation = () => {
+const Reservation = ({ history }) => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
   const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
 
@@ -79,7 +78,10 @@ const Reservation = () => {
   };
 
   const openModal = () => {
-    setModalOpen(true);
+    const { selectedRoom, startTime, endTime, department, title, purpose } =
+      userInput;
+    if (selectedRoom && startTime && endTime && department && title && purpose)
+      setModalOpen(true);
   };
 
   const closeModal = () => {
@@ -124,17 +126,20 @@ const Reservation = () => {
       !localStorage.getItem('access-token') ||
       !localStorage.getItem('refresh-token')
     ) {
-      localStorage.clear();
-      window.location.href = '/meeting';
+      // localStorage.clear();
+      console.log('cookie access-token:', access_token);
+      console.log('cookie refresh-token:', refresh_token);
+      console.log(localStorage.getItem('access-token'));
+      console.log(localStorage.getItem('refresh-token'));
+      // history.push('/');
     }
     initRooms();
-    // console.log('token', jwtDecode(getCookieValue('access_token')).sub);
   }, []);
 
   return (
-    <>
-      <div>
-        <Navigation />
+    <div>
+      <Navigation />
+      <div id="reservation-wrapper">
         <div>
           <div id="datepicker-wrapper">
             <input
@@ -157,6 +162,8 @@ const Reservation = () => {
               />
             );
           })}
+        </div>
+        <div>
           <ReservationForm
             userInput={userInput}
             setUserInput={setUserInput}
@@ -165,17 +172,17 @@ const Reservation = () => {
             reservedTime={reservedTime[userInput.selectedLocation]}
             openModal={openModal}
           />
-          <Modal
-            open={modalOpen}
-            close={closeModal}
-            header="Modal heading"
-            userInput={userInput}
-            members={memberArray}
-          ></Modal>
         </div>
+        <Modal
+          open={modalOpen}
+          close={closeModal}
+          header="Modal heading"
+          userInput={userInput}
+          members={memberArray}
+        ></Modal>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Reservation;
+export default withRouter(Reservation);

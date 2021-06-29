@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  fe:
+    image: nonalias/42meet_fe:1.0
+    ports:
+      - "3001:3000"

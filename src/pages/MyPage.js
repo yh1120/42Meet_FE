@@ -217,6 +217,7 @@ const MyPage = () => {
                       &times;
                     </Button>
                   </div>
+
                 </div>
               );
             })
