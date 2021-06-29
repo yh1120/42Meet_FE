@@ -2,3 +2,18 @@
   width: 80vw;
   margin: auto;
 }
+
+.table-h1 {
+  width: 7%;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.table-h2 {
+  width: 3%;
+  text-align: center;
+}
+
+.empty {
+  background-color: whitesmoke;
+}
