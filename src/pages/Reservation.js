@@ -132,9 +132,9 @@ const Reservation = () => {
   }, []);
 
   return (
-    <>
-      <div>
-        <Navigation />
+    <div>
+      <Navigation />
+      <div id="reservation-wrapper">
         <div>
           <div id="datepicker-wrapper">
             <input
@@ -157,6 +157,8 @@ const Reservation = () => {
               />
             );
           })}
+        </div>
+        <div>
           <ReservationForm
             userInput={userInput}
             setUserInput={setUserInput}
@@ -165,16 +167,16 @@ const Reservation = () => {
             reservedTime={reservedTime[userInput.selectedLocation]}
             openModal={openModal}
           />
-          <Modal
-            open={modalOpen}
-            close={closeModal}
-            header="Modal heading"
-            userInput={userInput}
-            members={memberArray}
-          ></Modal>
         </div>
+        <Modal
+          open={modalOpen}
+          close={closeModal}
+          header="Modal heading"
+          userInput={userInput}
+          members={memberArray}
+        ></Modal>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -22,12 +22,12 @@ const Timeline = ({
 
   return (
     <div id="timeline-wrapper">
-      <Table responsive size="sm">
+      <Table responsive size="sm" variant="dark" bordered hover>
         <thead>
           <tr>
-            <th style={{ width: '7%', textAlign: 'center' }}>{location}</th>
+            <th className="table-h1">{location}</th>
             {Array.from({ length: 24 }).map((_, index) => (
-              <th key={index} style={{ textAlign: 'center', width: '3%' }}>
+              <th key={index} className="table-h2">
                 {index}
               </th>
             ))}
@@ -37,31 +37,19 @@ const Timeline = ({
           {meetingRooms.map((meetingRoom, idx) => {
             return (
               <tr key={idx}>
-                <td
-                  onClick={handleClick}
-                  style={{ height: '30px', textAlign: 'center' }}
-                >
+                <td onClick={handleClick} className="table-h1">
                   {meetingRoom}
                 </td>
                 {timeArray.map((time, idx) => {
-                  return reservedTime === undefined ||
-                    reservedTime[meetingRoom].indexOf(time) !== -1 ? (
+                  return (
                     <td
                       key={idx}
-                      style={{
-                        backgroundColor: 'rgb(202, 211, 200)',
-                        border: '1px solid black',
-                        padding: '1px',
-                      }}
-                    ></td>
-                  ) : (
-                    <td
-                      key={idx}
-                      style={{
-                        backgroundColor: 'white',
-                        border: '1px solid black',
-                        padding: '1px',
-                      }}
+                      className={
+                        reservedTime === undefined ||
+                        reservedTime[meetingRoom].indexOf(time) !== -1
+                          ? ''
+                          : 'empty'
+                      }
                     ></td>
                   );
                 })}
