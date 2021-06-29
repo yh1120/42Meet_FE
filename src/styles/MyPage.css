@@ -1,0 +1,10 @@
+.info {
+  display: flex;
+  /* justify-content: center; */
+}
+
+.info .tag {
+  width: 50%;
+  /* background-color: orange; */
+  /* border: 1px solid papayawhip; */
+}
