@@ -1,15 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import {
-  getHeaders,
-  setTimeFormat,
-  setToken,
-  getCookieValue,
-} from '../utils/utils';
-import '../styles/Modal.css';
 import jwtDecode from 'jwt-decode';
+import { withRouter } from 'react-router-dom';
+import { getHeaders, setTimeFormat, setToken } from '../utils/utils';
+import '../styles/Modal.css';
 
-const Modal = ({ open, close, header, userInput, members }) => {
+const Modal = ({ open, close, header, userInput, members, history }) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
   const {
     selectedLocation,
@@ -70,7 +66,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
         { headers: getHeaders() }
       );
       setToken(response);
-      window.location.href = '/mypage';
+      history.push('/mypage');
     } catch (err) {
       if (err.statusCode === 400) {
         close();
@@ -115,4 +111,4 @@ const Modal = ({ open, close, header, userInput, members }) => {
   );
 };
 
-export default Modal;
+export default withRouter(Modal);

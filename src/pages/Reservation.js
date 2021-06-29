@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
 import Navigation from '../Components/Navigation';
@@ -13,9 +14,7 @@ import {
 import Modal from '../Components/Modal';
 import '../styles/Reservation.css';
 
-// eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjQyNzk0NjYsImV4cCI6MTYyNjg3MTQ2Niwic3ViIjoiZXNpbSJ9.RaaFIFUN8Iqs26XioCiAjRDSQUgeqBK_wrYnckZSUOU
-
-const Reservation = () => {
+const Reservation = ({ history }) => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
   const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
 
@@ -128,14 +127,13 @@ const Reservation = () => {
       !localStorage.getItem('refresh-token')
     ) {
       // localStorage.clear();
-      console.log(access_token);
-      console.log(refresh_token);
+      console.log('cookie access-token:', access_token);
+      console.log('cookie refresh-token:', refresh_token);
       console.log(localStorage.getItem('access-token'));
       console.log(localStorage.getItem('refresh-token'));
-      // window.location.href = '/';
+      // history.push('/');
     }
     initRooms();
-    // console.log('token', jwtDecode(getCookieValue('access_token')).sub);
   }, []);
 
   return (
@@ -187,4 +185,4 @@ const Reservation = () => {
   );
 };
 
-export default Reservation;
+export default withRouter(Reservation);
