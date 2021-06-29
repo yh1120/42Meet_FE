@@ -16,10 +16,10 @@ npm start
 ### 🗒 프로젝트 설명
 1. 라우팅
 ```
-Base URL: /meeting
+Base URL: /
 	- /
-	- /reservation
-	- /meeting/mypage
+	- /booking
+	- /mypage
 ```
 2. 컴포넌트
 ```javascript

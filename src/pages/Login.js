@@ -13,7 +13,7 @@ const Login = () => {
       localStorage.getItem('access-token') &&
       localStorage.getItem('refresh-token')
     ) {
-      window.location.href = '/meeting/reservation';
+      window.location.href = '/booking';
     }
   });
 

@@ -132,7 +132,7 @@ const Reservation = () => {
       console.log(refresh_token);
       console.log(localStorage.getItem('access-token'));
       console.log(localStorage.getItem('refresh-token'));
-      // window.location.href = '/meeting';
+      // window.location.href = '/';
     }
     initRooms();
     // console.log('token', jwtDecode(getCookieValue('access_token')).sub);
