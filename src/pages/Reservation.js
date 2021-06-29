@@ -124,8 +124,12 @@ const Reservation = () => {
       !localStorage.getItem('access-token') ||
       !localStorage.getItem('refresh-token')
     ) {
-      localStorage.clear();
-      window.location.href = '/meeting';
+      // localStorage.clear();
+      console.log(access_token);
+      console.log(refresh_token);
+      console.log(localStorage.getItem('access-token'));
+      console.log(localStorage.getItem('refresh-token'));
+      // window.location.href = '/meeting';
     }
     initRooms();
     // console.log('token', jwtDecode(getCookieValue('access_token')).sub);
