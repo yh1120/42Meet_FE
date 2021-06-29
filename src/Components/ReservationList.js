@@ -11,7 +11,7 @@ const ReservationList = ({ reservation, setValidate }) => {
   const handleClick = (e) => {
     const i = parseInt(e.target.id);
     axios({
-      url: 'http://15.164.85.227:8081/delete',
+      url: 'http://42meet.kro.kr/reservation/delete',
       method: 'POST',
       headers: getHeaders(),
       data: {

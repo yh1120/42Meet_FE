@@ -25,7 +25,7 @@ const MyPage = () => {
   const getReservations = async () => {
     try {
       axios({
-        url: 'http://15.164.85.227:8081/mypage',
+        url: 'http://42meet.kro.kr/reservation/mypage',
         method: 'GET',
         headers: getHeaders(),
       }).then((response) => {
@@ -64,7 +64,7 @@ const MyPage = () => {
   const handleClick = (e) => {
     const i = parseInt(e.target.id);
     axios({
-      url: 'http://15.164.85.227:8081/delete',
+      url: 'http://42meet.kro.kr/reservation/delete',
       method: 'POST',
       headers: getHeaders(),
       data: {
@@ -217,7 +217,6 @@ const MyPage = () => {
                       &times;
                     </Button>
                   </div>
-
                 </div>
               );
             })
