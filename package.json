@@ -1,7 +1,6 @@
 {
   "name": "42meet",
   "version": "0.1.0",
-  "homepage": "http://3.35.14.180/meeting",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
