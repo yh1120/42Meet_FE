@@ -3,3 +3,11 @@
   justify-content: center;
   margin: 1rem;
 }
+
+@media screen and (min-width: 992px) {
+  #reservation-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

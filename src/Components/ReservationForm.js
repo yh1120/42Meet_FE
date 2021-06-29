@@ -64,6 +64,7 @@ const ReservationForm = ({
           setUserInput={setUserInput}
           reservedTime={reservedTime}
         ></TimePicker>
+        <div>~</div>
         <TimePicker
           name="endTime"
           userInput={userInput}
@@ -96,7 +97,6 @@ const ReservationForm = ({
         onChange={handleInputChange}
       />
       <TextField
-        // id="standard-basic"
         label="팀원을 입력해주세요"
         variant="outlined"
         size="small"
