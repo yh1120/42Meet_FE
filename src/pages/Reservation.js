@@ -79,7 +79,10 @@ const Reservation = () => {
   };
 
   const openModal = () => {
-    setModalOpen(true);
+    const { selectedRoom, startTime, endTime, department, title, purpose } =
+      userInput;
+    if (selectedRoom && startTime && endTime && department && title && purpose)
+      setModalOpen(true);
   };
 
   const closeModal = () => {

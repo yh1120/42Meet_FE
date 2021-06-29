@@ -46,7 +46,9 @@ const ReservationForm = ({
     const i = parseInt(e.target.id);
     setMemberArray(memberArray.slice(0, i).concat(memberArray.slice(i + 1)));
   };
+
   const classes = useStyles();
+
   return (
     <div
       id="reservation-form-wrapper"
@@ -79,6 +81,7 @@ const ReservationForm = ({
         name="department"
         value={userInput.department}
         onChange={handleInputChange}
+        error={userInput.department ? false : true}
       />
       <TextField
         label="행사명"
@@ -87,6 +90,7 @@ const ReservationForm = ({
         name="title"
         value={userInput.title}
         onChange={handleInputChange}
+        error={userInput.title ? false : true}
       />
       <TextField
         label="사용 목적"
@@ -95,6 +99,7 @@ const ReservationForm = ({
         name="purpose"
         value={userInput.purpose}
         onChange={handleInputChange}
+        error={userInput.purpose ? false : true}
       />
       <TextField
         label="팀원을 입력해주세요"
@@ -116,7 +121,20 @@ const ReservationForm = ({
           </div>
         );
       })}
-      <Button variant="dark" onClick={openModal}>
+      <Button
+        variant="dark"
+        disabled={
+          userInput.selectedRoom &&
+          userInput.startTime &&
+          userInput.endTime &&
+          userInput.department &&
+          userInput.purpose &&
+          userInput.title
+            ? false
+            : true
+        }
+        onClick={openModal}
+      >
         Reservation
       </Button>
     </div>
