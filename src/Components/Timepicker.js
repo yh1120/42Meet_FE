@@ -34,6 +34,8 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
                 reservedTime === undefined ||
                 reservedTime[selectedRoom].indexOf(time) !== -1
                   ? true
+                  : name === 'endTime' && idx >= userInput.endTime
+                  ? true
                   : false
               }
             >
