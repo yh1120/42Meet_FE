@@ -37,13 +37,15 @@ const Reservation = ({ history }) => {
   const initRooms = async () => {
     try {
       const rooms_res = await axios.get(
-        'http://42meet.kro.kr/reservation/rooms',
+        'http://42meet.kro.kr:9000/rooms',
+        // 'http://42meet.kro.kr/reservation/rooms',
         { headers: getHeaders() }
       );
       setLocations(rooms_res.data);
       try {
         const reservation_res = await axios.get(
-          `http://42meet.kro.kr/reservation/list?date=${userInput.selectedDate}`,
+          `http://42meet.kro.kr:9000/list?date=${userInput.selectedDate}`,
+          // `http://42meet.kro.kr/reservation/list?date=${userInput.selectedDate}`,
           { headers: getHeaders() }
         );
         setAlreadyReservations(reservation_res.data);
@@ -60,7 +62,8 @@ const Reservation = ({ history }) => {
     const selectedDate = e.target.value;
     try {
       const response = await axios.get(
-        `http://42meet.kro.kr/reservation/list?date=${selectedDate}`,
+        `http://42meet.kro.kr:9000/list?date=${userInput.selectedDate}`,
+        // `http://42meet.kro.kr/reservation/list?date=${selectedDate}`,
         { headers: getHeaders() }
       );
       setAlreadyReservations(response.data);
