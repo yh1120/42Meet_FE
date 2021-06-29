@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { getHoursArray } from '../utils/utils';
 
 const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
   const timeArray = getHoursArray();
   const { selectedRoom } = userInput;
+  const [earliestReservedTime, setEarliestReservedTime] = useState(23);
 
   const handleChange = (e) => {
     let selectedTime = e.target.value;
@@ -20,6 +21,17 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
     }
   };
 
+  useEffect(() => {
+    if (reservedTime && userInput.selectedRoom) {
+      for (let i = 0; i < reservedTime[userInput.selectedRoom].length; i++) {
+        if (userInput.startTime < reservedTime[userInput.selectedRoom][i]) {
+          setEarliestReservedTime(reservedTime[userInput.selectedRoom][i]);
+          break;
+        }
+      }
+    }
+  }, [reservedTime, userInput.selectedRoom, userInput.startTime]);
+
   return (
     <div>
       <select
@@ -27,16 +39,24 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
         onChange={handleChange}
       >
         {timeArray.map((time, idx) => {
-          return (
+          return name === 'startTime' ? (
             <option
               key={idx}
               disabled={
                 reservedTime === undefined ||
                 reservedTime[selectedRoom].indexOf(time) !== -1
-                  ? true
-                  : name === 'endTime' && idx >= userInput.endTime
-                  ? true
-                  : false
+              }
+            >
+              {time < 12 ? `${time}AM` : `${time}PM`}
+            </option>
+          ) : (
+            <option
+              key={idx}
+              disabled={
+                reservedTime === undefined ||
+                reservedTime[selectedRoom].indexOf(time - 1) !== -1 ||
+                time > earliestReservedTime ||
+                time <= userInput.startTime
               }
             >
               {time < 12 ? `${time}AM` : `${time}PM`}
