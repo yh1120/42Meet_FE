@@ -70,7 +70,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
         { headers: getHeaders() }
       );
       setToken(response);
-      window.location.href = '/meeting/mypage';
+      window.location.href = '/mypage';
     } catch (err) {
       if (err.statusCode === 400) {
         close();
