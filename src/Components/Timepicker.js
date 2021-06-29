@@ -23,9 +23,25 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
   return (
     <div>
       <select
-        disabled={selectedRoom === '' ? true : false}
+        disabled={
+          selectedRoom === ''
+            ? true
+            : name === 'endTime' && !userInput.startTime
+            ? true
+            : false
+        }
         onChange={handleChange}
       >
+        <option
+          selected={
+            (name === 'startTime' && userInput.startTime === null) ||
+            (name === 'endTime' && userInput.endTime === null)
+              ? true
+              : false
+          }
+        >
+          {name}
+        </option>
         {timeArray.map((time, idx) => {
           return (
             <option
