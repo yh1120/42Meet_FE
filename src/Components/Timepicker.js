@@ -23,21 +23,39 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
 
   useEffect(() => {
     if (reservedTime && userInput.selectedRoom) {
+      let time = 23;
       for (let i = 0; i < reservedTime[userInput.selectedRoom].length; i++) {
         if (userInput.startTime < reservedTime[userInput.selectedRoom][i]) {
-          setEarliestReservedTime(reservedTime[userInput.selectedRoom][i]);
+          time = reservedTime[userInput.selectedRoom][i];
           break;
         }
       }
+      setEarliestReservedTime(time);
     }
   }, [reservedTime, userInput.selectedRoom, userInput.startTime]);
 
   return (
     <div>
       <select
-        disabled={selectedRoom === '' ? true : false}
+        disabled={
+          selectedRoom === ''
+            ? true
+            : name === 'endTime' && !userInput.startTime
+            ? true
+            : false
+        }
         onChange={handleChange}
       >
+        <option
+          selected={
+            (name === 'startTime' && userInput.startTime === null) ||
+            (name === 'endTime' && userInput.endTime === null)
+              ? true
+              : false
+          }
+        >
+          {name}
+        </option>
         {timeArray.map((time, idx) => {
           return name === 'startTime' ? (
             <option

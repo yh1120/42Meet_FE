@@ -17,6 +17,8 @@ const Timeline = ({
       ...userInput,
       selectedRoom: e.target.innerText,
       selectedLocation: location,
+      startTime: null,
+      endTime: null,
     });
   };
 
