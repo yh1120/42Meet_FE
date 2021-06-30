@@ -5,8 +5,8 @@ import '../styles/Login.css';
 
 const Login = ({ history }) => {
   const handleLogin = async () => {
-    window.location.href = 'http://15.164.85.227:8080/login';
-    // window.location.href = 'http://42meet.kro.kr/member/login';
+    // window.location.href = 'http://15.164.85.227:8080/login';
+    window.location.href = 'http://42meet.kro.kr/login';
   };
 
   useEffect(() => {

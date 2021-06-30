@@ -35,14 +35,21 @@ const Reservation = ({ history }) => {
   const [memberArray, setMemberArray] = useState([]);
 
   const initRooms = async () => {
+    console.log('hi', getHeaders());
     try {
-      const rooms_res = await axios.get('http://42meet.kro.kr:9100/rooms', {
-        headers: getHeaders(),
-      });
+      const rooms_res = await axios.get(
+        // 'http://42meet.kro.kr:9100/rooms'
+        'http://42meet.kro.kr/reservation/rooms',
+        {
+          headers: getHeaders(),
+        }
+      );
+      console.log('rooms_res', rooms_res);
+
       setLocations(rooms_res.data);
       try {
         const reservation_res = await axios.get(
-          `http://42meet.kro.kr:9100/list?date=${userInput.date}`,
+          `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
           // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
           { headers: getHeaders() }
         );
@@ -60,7 +67,7 @@ const Reservation = ({ history }) => {
     const date = e.target.value;
     try {
       const response = await axios.get(
-        `http://42meet.kro.kr:9100/list?date=${date}`,
+        `http://42meet.kro.kr/reservation/list?date=${date}`,
         // `http://42meet.kro.kr/reservation/list?date=${date}`,
         { headers: getHeaders() }
       );
@@ -128,12 +135,12 @@ const Reservation = ({ history }) => {
       !localStorage.getItem('access-token') ||
       !localStorage.getItem('refresh-token')
     ) {
-      // localStorage.clear();
+      localStorage.clear();
       console.log('cookie access-token:', access_token);
       console.log('cookie refresh-token:', refresh_token);
       console.log(localStorage.getItem('access-token'));
       console.log(localStorage.getItem('refresh-token'));
-      // history.push('/');
+      history.push('/');
     }
     initRooms();
   }, []);
