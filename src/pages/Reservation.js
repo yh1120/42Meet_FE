@@ -43,6 +43,7 @@ const Reservation = ({ history }) => {
       try {
         const reservation_res = await axios.get(
           `http://42meet.kro.kr:9001/list?date=${userInput.selectedDate}`,
+          // `http://42meet.kro.kr/reservation/list?date=${userInput.selectedDate}`,
           { headers: getHeaders() }
         );
         setAlreadyReservations(reservation_res.data);
@@ -59,7 +60,8 @@ const Reservation = ({ history }) => {
     const selectedDate = e.target.value;
     try {
       const response = await axios.get(
-        `http://42meet.kro.kr:9001/list?date=${selectedDate}`,
+        `http://42meet.kro.kr:9001/list?date=${userInput.selectedDate}`,
+        // `http://42meet.kro.kr/reservation/list?date=${selectedDate}`,
         { headers: getHeaders() }
       );
       setAlreadyReservations(response.data);
