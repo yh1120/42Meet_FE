@@ -8,8 +8,13 @@ import Modal from '../Components/Modal';
 import '../styles/ReservationList.css';
 
 const ReservationList = ({ reservation, setValidate, clickedButton }) => {
+  const reservationIntTime = {
+    ...reservation,
+    startTime: parseInt(reservation.startTime.slice(0, 2)),
+    endTime: parseInt(reservation.endTime.slice(0, 2)) + 1,
+  };
   const { date, startTime, endTime, roomName, members, leaderName, id } =
-    reservation;
+    reservationIntTime;
   const [deleteOpen, setModalOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -18,7 +23,7 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
       const i = parseInt(e.target.id);
       console.log(i);
       axios({
-        url: 'http://42meet.kro.kr:9000/delete',
+        url: 'http://42meet.kro.kr:9100/delete',
         method: 'POST',
         headers: getHeaders(),
         data: {
@@ -69,8 +74,7 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
       <div className="info">
         <div className="tag">예약 시간</div>
         <div>
-          {`${parseInt(startTime.slice(0, 2))}시`} ~{' '}
-          {`${parseInt(endTime.slice(0, 2)) + 1}시`}
+          {`${startTime}시`} ~ {`${endTime}시`}
         </div>
       </div>
       <div className="info">
@@ -132,7 +136,7 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
         open={detailOpen}
         close={closeDetail}
         header="상세히 보기"
-        userInput={reservation}
+        userInput={reservationIntTime}
         members={reservation.members}
       ></Modal>
 

@@ -15,8 +15,8 @@ const Timeline = ({
   const handleClick = (e) => {
     setUserInput({
       ...userInput,
-      selectedRoom: e.target.innerText,
-      selectedLocation: location,
+      roomName: e.target.innerText,
+      location: location,
       startTime: null,
       endTime: null,
     });

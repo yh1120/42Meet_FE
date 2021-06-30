@@ -24,7 +24,7 @@ const MyPage = () => {
   const getReservations = async () => {
     try {
       axios({
-        url: 'http://42meet.kro.kr:9000/mypage',
+        url: 'http://42meet.kro.kr:9100/mypage',
         method: 'GET',
         headers: getHeaders(),
       }).then((response) => {
