@@ -57,7 +57,7 @@ const ReservationForm = ({
       autoComplete="off"
     >
       <Typography align="center">
-        회의실 명: [{userInput.selectedLocation} - {userInput.selectedRoom}]
+        회의실 명: [{userInput.location} - {userInput.roomName}]
       </Typography>
       <div id="time-picker">
         <TimePicker
@@ -124,7 +124,7 @@ const ReservationForm = ({
       <Button
         variant="dark"
         disabled={
-          userInput.selectedRoom &&
+          userInput.roomName &&
           userInput.startTime &&
           userInput.endTime &&
           userInput.department &&

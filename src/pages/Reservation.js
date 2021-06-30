@@ -22,9 +22,9 @@ const Reservation = ({ history }) => {
   const [alreadyReservations, setAlreadyReservations] = useState([]);
   const [reservedTime, setReservedTime] = useState([]);
   const [userInput, setUserInput] = useState({
-    selectedDate: minDate,
-    selectedLocation: '',
-    selectedRoom: '',
+    date: minDate,
+    location: '',
+    roomName: '',
     startTime: null,
     endTime: null,
     department: '',
@@ -36,14 +36,14 @@ const Reservation = ({ history }) => {
 
   const initRooms = async () => {
     try {
-      const rooms_res = await axios.get('http://42meet.kro.kr:9001/rooms', {
+      const rooms_res = await axios.get('http://42meet.kro.kr:9100/rooms', {
         headers: getHeaders(),
       });
       setLocations(rooms_res.data);
       try {
         const reservation_res = await axios.get(
-          `http://42meet.kro.kr:9001/list?date=${userInput.selectedDate}`,
-          // `http://42meet.kro.kr/reservation/list?date=${userInput.selectedDate}`,
+          `http://42meet.kro.kr:9100/list?date=${userInput.date}`,
+          // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
           { headers: getHeaders() }
         );
         setAlreadyReservations(reservation_res.data);
@@ -57,19 +57,19 @@ const Reservation = ({ history }) => {
   };
 
   const onChange = async (e) => {
-    const selectedDate = e.target.value;
+    const date = e.target.value;
     try {
       const response = await axios.get(
-        `http://42meet.kro.kr:9001/list?date=${userInput.selectedDate}`,
-        // `http://42meet.kro.kr/reservation/list?date=${selectedDate}`,
+        `http://42meet.kro.kr:9100/list?date=${date}`,
+        // `http://42meet.kro.kr/reservation/list?date=${date}`,
         { headers: getHeaders() }
       );
       setAlreadyReservations(response.data);
       setUserInput({
         ...userInput,
-        selectedDate: selectedDate,
-        selectedLocation: '',
-        selectedRoom: '',
+        date: date,
+        location: '',
+        roomName: '',
         startTime: null,
         endTime: null,
       });
@@ -80,9 +80,9 @@ const Reservation = ({ history }) => {
   };
 
   const openModal = () => {
-    const { selectedRoom, startTime, endTime, department, title, purpose } =
+    const { roomName, startTime, endTime, department, title, purpose } =
       userInput;
-    if (selectedRoom && startTime && endTime && department && title && purpose)
+    if (roomName && startTime && endTime && department && title && purpose)
       setModalOpen(true);
   };
 
@@ -147,7 +147,7 @@ const Reservation = ({ history }) => {
             <input
               type="date"
               onChange={onChange}
-              value={userInput.selectedDate}
+              value={userInput.date}
               min={minDate}
               max={maxDate}
             ></input>
@@ -171,14 +171,14 @@ const Reservation = ({ history }) => {
             setUserInput={setUserInput}
             memberArray={memberArray}
             setMemberArray={setMemberArray}
-            reservedTime={reservedTime[userInput.selectedLocation]}
+            reservedTime={reservedTime[userInput.location]}
             openModal={openModal}
           />
         </div>
         <Modal
           open={modalOpen}
           close={closeModal}
-          header="Modal heading"
+          header="예약 신청"
           userInput={userInput}
           members={memberArray}
         ></Modal>

@@ -4,13 +4,14 @@ import jwtDecode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
 import { getHeaders, setTimeFormat, setToken } from '../utils/utils';
 import '../styles/Modal.css';
+import '../styles/ReservationList.css';
 
 const Modal = ({ open, close, header, userInput, members, history }) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
   const {
-    selectedLocation,
-    selectedDate,
-    selectedRoom,
+    location,
+    date,
+    roomName,
     startTime,
     endTime,
     department,
@@ -29,14 +30,19 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
   ];
 
   const values = {
-    [infos[0]]: selectedDate,
-    [infos[1]]: selectedRoom,
+    [infos[0]]: date,
+    [infos[1]]: roomName,
     [infos[2]]: startTime + '시 ~ ' + endTime + '시',
     [infos[3]]: department,
     [infos[4]]: title,
     [infos[5]]: purpose,
     [infos[6]]: members ? (
-      <ul>
+      <ul
+        style={{
+          listStyle: 'none',
+          paddingLeft: '0px',
+        }}
+      >
         {members.map((member, idx) => {
           return <li key={idx}>{member}</li>;
         })}
@@ -49,13 +55,12 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
   const submit = async () => {
     try {
       const response = await axios.post(
-
-        'http://42meet.kro.kr:9001/register',
+        'http://42meet.kro.kr:9100/register',
 
         {
-          location: selectedLocation,
-          roomName: selectedRoom,
-          date: selectedDate,
+          location: location,
+          roomName: roomName,
+          date: date,
           startTime: setTimeFormat(startTime, 'start'),
           endTime: setTimeFormat(endTime, 'end'),
           leaderName: jwtDecode(localStorage.getItem('access-token')).sub,
@@ -91,8 +96,8 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
             <div>
               {infos.map((text, idx) => {
                 return (
-                  <div key={idx}>
-                    <div>{text}</div>
+                  <div className="info" key={idx}>
+                    <div className="tag">{text}</div>
                     <div>{values[text]}</div>
                   </div>
                 );
@@ -100,9 +105,11 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
             </div>
           </main>
           <footer>
-            <button className="submit" onClick={submit}>
-              submit
-            </button>
+            {header === '예약 신청' ? (
+              <button className="submit" onClick={submit}>
+                submit
+              </button>
+            ) : null}
             <button className="close" onClick={close}>
               close
             </button>

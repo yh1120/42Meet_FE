@@ -3,7 +3,7 @@ import { getHoursArray } from '../utils/utils';
 
 const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
   const timeArray = getHoursArray();
-  const { selectedRoom } = userInput;
+  const { roomName } = userInput;
   const [earliestReservedTime, setEarliestReservedTime] = useState(23);
 
   const handleChange = (e) => {
@@ -22,23 +22,23 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
   };
 
   useEffect(() => {
-    if (reservedTime && userInput.selectedRoom) {
+    if (reservedTime && userInput.roomName) {
       let time = 23;
-      for (let i = 0; i < reservedTime[userInput.selectedRoom].length; i++) {
-        if (userInput.startTime < reservedTime[userInput.selectedRoom][i]) {
-          time = reservedTime[userInput.selectedRoom][i];
+      for (let i = 0; i < reservedTime[userInput.roomName].length; i++) {
+        if (userInput.startTime < reservedTime[userInput.roomName][i]) {
+          time = reservedTime[userInput.roomName][i];
           break;
         }
       }
       setEarliestReservedTime(time);
     }
-  }, [reservedTime, userInput.selectedRoom, userInput.startTime]);
+  }, [reservedTime, userInput.roomName, userInput.startTime]);
 
   return (
     <div>
       <select
         disabled={
-          selectedRoom === ''
+          roomName === ''
             ? true
             : name === 'endTime' && !userInput.startTime
             ? true
@@ -62,7 +62,7 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
               key={idx}
               disabled={
                 reservedTime === undefined ||
-                reservedTime[selectedRoom].indexOf(time) !== -1
+                reservedTime[roomName].indexOf(time) !== -1
               }
             >
               {time < 12 ? `${time}AM` : `${time}PM`}
@@ -72,7 +72,7 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
               key={idx}
               disabled={
                 reservedTime === undefined ||
-                reservedTime[selectedRoom].indexOf(time - 1) !== -1 ||
+                reservedTime[roomName].indexOf(time - 1) !== -1 ||
                 time > earliestReservedTime ||
                 time <= userInput.startTime
               }
