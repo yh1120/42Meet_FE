@@ -49,8 +49,7 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
   const submit = async () => {
     try {
       const response = await axios.post(
-
-        'http://42meet.kro.kr:9001/register',
+        'http://42meet.kro.kr:9000/register',
 
         {
           location: selectedLocation,
@@ -100,9 +99,11 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
             </div>
           </main>
           <footer>
-            <button className="submit" onClick={submit}>
-              submit
-            </button>
+            {header === '예약 신청' ? (
+              <button className="submit" onClick={submit}>
+                submit
+              </button>
+            ) : null}
             <button className="close" onClick={close}>
               close
             </button>

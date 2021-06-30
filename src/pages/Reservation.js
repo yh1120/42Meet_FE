@@ -36,13 +36,13 @@ const Reservation = ({ history }) => {
 
   const initRooms = async () => {
     try {
-      const rooms_res = await axios.get('http://42meet.kro.kr:9001/rooms', {
+      const rooms_res = await axios.get('http://42meet.kro.kr:9000/rooms', {
         headers: getHeaders(),
       });
       setLocations(rooms_res.data);
       try {
         const reservation_res = await axios.get(
-          `http://42meet.kro.kr:9001/list?date=${userInput.selectedDate}`,
+          `http://42meet.kro.kr:9000/list?date=${userInput.selectedDate}`,
           // `http://42meet.kro.kr/reservation/list?date=${userInput.selectedDate}`,
           { headers: getHeaders() }
         );
@@ -60,7 +60,7 @@ const Reservation = ({ history }) => {
     const selectedDate = e.target.value;
     try {
       const response = await axios.get(
-        `http://42meet.kro.kr:9001/list?date=${userInput.selectedDate}`,
+        `http://42meet.kro.kr:9000/list?date=${userInput.selectedDate}`,
         // `http://42meet.kro.kr/reservation/list?date=${selectedDate}`,
         { headers: getHeaders() }
       );
@@ -178,7 +178,7 @@ const Reservation = ({ history }) => {
         <Modal
           open={modalOpen}
           close={closeModal}
-          header="Modal heading"
+          header="예약 신청"
           userInput={userInput}
           members={memberArray}
         ></Modal>

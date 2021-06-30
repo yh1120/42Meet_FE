@@ -3,7 +3,6 @@ import Navigation from '../Components/Navigation';
 import axios from 'axios';
 import { getHeaders, setToken } from '../utils/utils';
 import { Button } from 'react-bootstrap';
-import '../styles/MyPage.css';
 import ReservationList from '../Components/ReservationList';
 
 const MyPage = () => {
@@ -25,7 +24,7 @@ const MyPage = () => {
   const getReservations = async () => {
     try {
       axios({
-        url: 'http://42meet.kro.kr:9001/mypage',
+        url: 'http://42meet.kro.kr:9000/mypage',
         method: 'GET',
         headers: getHeaders(),
       }).then((response) => {
@@ -58,10 +57,7 @@ const MyPage = () => {
       setMyReservations(allReservations[1]);
     }
   };
-  const test = (e) => {
-    console.log('test');
-    console.log(e.target);
-  };
+
   useEffect(() => {
     if (myReservations === null || validate === true) {
       getReservations();
@@ -114,7 +110,7 @@ const MyPage = () => {
         {myReservations !== null
           ? Array.from(myReservations).map((reservation) => {
               return (
-                <div onClick={test}>
+                <div>
                   <ReservationList
                     reservation={reservation}
                     setValidate={setValidate}
