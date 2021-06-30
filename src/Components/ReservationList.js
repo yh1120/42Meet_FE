@@ -1,37 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import { getHeaders, setToken } from '../utils/utils';
+import MyPageModal from '../Components/MyPageModal';
 
-const ReservationList = ({ reservation, setValidate }) => {
+const ReservationList = ({ reservation, setValidate, clickedButton }) => {
   const { date, startTime, endTime, roomName, members, leaderName, id } =
     reservation;
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleClick = (e) => {
-    const i = parseInt(e.target.id);
-    axios({
-      url: 'http://42meet.kro.kr/reservation/delete',
-      method: 'POST',
-      headers: getHeaders(),
-      data: {
-        id: i,
-      },
-    }).then((response) => {
-      console.log('응답', response);
-      if (response.status === 200) {
+    try {
+      const i = parseInt(e.target.id);
+      console.log(i);
+      axios({
+        url: 'http://42meet.kro.kr:9001/delete',
+        method: 'POST',
+        headers: getHeaders(),
+        data: {
+          id: i,
+        },
+      }).then((response) => {
+        console.log('응답', response);
         setValidate(true);
-      }
-      setToken(response);
-    });
+        setToken(response);
+        closeModal();
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   return (
     <div
       key={id}
       style={{
-        width: '200px',
-        minHeight: '200px',
+        width: '250px',
         border: '1px solid black',
         textAlign: 'center',
         margin: '3px',
@@ -67,25 +80,36 @@ const ReservationList = ({ reservation, setValidate }) => {
           }}
         >
           {members.map((member, m_idx) => {
-            return <div key={m_idx}>{member} </div>;
+            return leaderName !== member ? (
+              <div key={m_idx}>{member} </div>
+            ) : null;
           })}
         </div>
       </div>
-
       <div>
         <Button
           id={id}
           variant="dark"
           disabled={
-            leaderName !== jwtDecode(localStorage.getItem('access-token')).sub
+            leaderName !==
+              jwtDecode(localStorage.getItem('access-token')).sub ||
+            clickedButton === 'present'
               ? true
               : false
           }
-          onClick={handleClick}
+          onClick={openModal}
         >
           &times;
         </Button>
       </div>
+      <MyPageModal
+        open={modalOpen}
+        id={id}
+        close={closeModal}
+        header="Modal heading"
+        handleClick={handleClick}
+        //   members={memberArray}
+      ></MyPageModal>
     </div>
   );
 };
