@@ -26,9 +26,9 @@ const Modal = ({ open, close, header, handleClick, id }) => {
             <button className="submit" id={id} onClick={handleClick}>
               submit
             </button>
-            <button className="close" onClick={close}>
+            {/* <button className="close" onClick={close}>
               close
-            </button>
+            </button> */}
           </footer>
         </section>
       ) : null}

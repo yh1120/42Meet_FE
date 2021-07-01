@@ -1,8 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
-import { getHeaders, setTimeFormat, setToken } from '../utils/utils';
+import {
+  getHeaders,
+  getUserName,
+  setTimeFormat,
+  setToken,
+} from '../utils/utils';
 import '../styles/Modal.css';
 import '../styles/ReservationList.css';
 
@@ -63,7 +67,7 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
           date: date,
           startTime: setTimeFormat(startTime, 'start'),
           endTime: setTimeFormat(endTime, 'end'),
-          leaderName: jwtDecode(localStorage.getItem('access-token')).sub,
+          leaderName: getUserName(),
           department: department,
           purpose: purpose,
           title: title,
@@ -110,9 +114,9 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
                 submit
               </button>
             ) : null}
-            <button className="close" onClick={close}>
+            {/* <button className="close" onClick={close}>
               close
-            </button>
+            </button> */}
           </footer>
         </section>
       ) : null}

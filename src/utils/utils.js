@@ -96,3 +96,7 @@ export const setToken = (response) => {
     localStorage.setItem('refresh-token', refresh_token);
   }
 };
+
+export const getUserName = () => {
+  return jwtDecode(localStorage.getItem('access-token')).sub;
+};

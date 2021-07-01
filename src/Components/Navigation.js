@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
+import { getUserName } from '../utils/utils';
 
 const Navigation = ({ history }) => {
   const handleLogout = () => {
@@ -17,6 +18,7 @@ const Navigation = ({ history }) => {
           <Nav className="mr-auto">
             <Nav.Link href="/booking">Reservation</Nav.Link>
             <Nav.Link href="/mypage">My Page</Nav.Link>
+            <Nav.Link disabled>{getUserName()}</Nav.Link>
           </Nav>
           <Button variant="dark" onClick={handleLogout}>
             Logout

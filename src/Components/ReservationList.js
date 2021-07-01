@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-import { getHeaders, setToken } from '../utils/utils';
+import { getHeaders, getUserName, setToken } from '../utils/utils';
 import MyPageModal from '../Components/MyPageModal';
 import Modal from '../Components/Modal';
 import '../styles/ReservationList.css';
@@ -119,9 +118,7 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
               id={id}
               variant="dark"
               disabled={
-                leaderName !==
-                  jwtDecode(localStorage.getItem('access-token')).sub ||
-                clickedButton === 'present'
+                leaderName !== getUserName() || clickedButton === 'present'
                   ? true
                   : false
               }
