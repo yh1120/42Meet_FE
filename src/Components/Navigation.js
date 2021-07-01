@@ -5,7 +5,7 @@ import { getUserName } from '../utils/utils';
 
 const Navigation = ({ history }) => {
   const handleLogout = () => {
-    // localStorage.clear();
+    localStorage.clear();
     history.push('/');
   };
 
