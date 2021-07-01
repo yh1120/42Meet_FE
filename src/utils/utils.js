@@ -98,5 +98,7 @@ export const setToken = (response) => {
 };
 
 export const getUserName = () => {
-  return jwtDecode(localStorage.getItem('access-token')).sub;
+  const access_token = localStorage.getItem('access-token');
+  if (access_token) return jwtDecode(access_token).sub;
+  return '';
 };
