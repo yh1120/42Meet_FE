@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { getUserName } from '../utils/utils';
 import axios from 'axios';
+import { getRole } from '../api/api';
 
 const Navigation = ({ history }) => {
   const [userRole, setUserRole] = useState('ROLE_USER');
@@ -20,10 +21,7 @@ const Navigation = ({ history }) => {
 
   const getUserRole = async () => {
     try {
-      const response = await axios.get(
-        `http://42meet.kro.kr/member/${getUserName()}/role`,
-        { headers: { withCredentials: true } }
-      );
+      const response = await getRole(getUserName());
       setUserRole(response.data);
     } catch (err) {
       console.log(err);

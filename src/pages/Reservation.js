@@ -12,6 +12,7 @@ import {
   setToken,
 } from '../utils/utils';
 import Modal from '../Components/Modal';
+import { getReservations, getRooms } from '../api/api';
 import '../styles/Reservation.css';
 
 const Reservation = ({ history }) => {
@@ -36,22 +37,21 @@ const Reservation = ({ history }) => {
 
   const initRooms = async () => {
     try {
-      const rooms_res = await axios.get(
-        // 'http://42meet.kro.kr:9100/rooms'
-        'http://42meet.kro.kr/reservation/rooms',
-        { headers: { withCredentials: true } }
-      );
+      const rooms_res = await getRooms();
+      // const rooms_res = await axios.get(
+      //   'http://42meet.kro.kr/reservation/rooms',
+      //   { headers: { withCredentials: true } }
+      // );
       console.log('rooms_res', rooms_res);
-
       setLocations(rooms_res.data);
       try {
-        const reservation_res = await axios.get(
-          `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
-          // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
-          { headers: { withCredentials: true } }
-        );
+        const reservation_res = await getReservations(userInput.data);
+        // const reservation_res = await axios.get(
+        //   `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
+        //   // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
+        //   { headers: { withCredentials: true } }
+        // );
         setAlreadyReservations(reservation_res.data);
-
         setToken(reservation_res);
       } catch (err) {
         console.log(err);
@@ -64,11 +64,12 @@ const Reservation = ({ history }) => {
   const onChange = async (e) => {
     const date = e.target.value;
     try {
-      const response = await axios.get(
-        `http://42meet.kro.kr/reservation/list?date=${date}`,
-        // `http://42meet.kro.kr/reservation/list?date=${date}`,
-        { headers: getHeaders() }
-      );
+      const response = await getReservations(date);
+      // const response = await axios.get(
+      //   `http://42meet.kro.kr/reservation/list?date=${date}`,
+      //   // `http://42meet.kro.kr/reservation/list?date=${date}`,
+      //   { headers: getHeaders() }
+      // );
       setAlreadyReservations(response.data);
       setUserInput({
         ...userInput,
