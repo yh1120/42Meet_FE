@@ -6,10 +6,16 @@ import axios from 'axios';
 
 const Navigation = ({ history }) => {
   const [userRole, setUserRole] = useState('ROLE_USER');
+  const [userName, setUserName] = useState('');
+
+  const handleLogin = async () => {
+    window.location.href = 'http://42meet.kro.kr/login';
+  };
 
   const handleLogout = () => {
     localStorage.clear();
-    history.push('/');
+    setUserName('');
+    history.push('/booking');
   };
 
   const getUserRole = async () => {
@@ -18,35 +24,41 @@ const Navigation = ({ history }) => {
         `http://42meet.kro.kr/member/${getUserName()}/role`,
         { headers: { withCredentials: true } }
       );
+      setUserRole(response.data);
     } catch (err) {
       console.log(err);
     }
-    // setUserRole('ROLE_ADMIN');
   };
 
   useEffect(() => {
-    // if (userName && getUserName()) getUserInfo();
-    // if (getUserName()) getUserRole();
-    getUserRole();
-  }, []);
+    if (!userName) {
+      setUserName(getUserName());
+      getUserRole();
+    }
+  }, [userName]);
 
   return (
     <div>
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="/">42Meet</Navbar.Brand>
+        <Navbar.Brand href="/booking">42Meet</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/booking">Reservation</Nav.Link>
-            <Nav.Link href="/mypage">My Page</Nav.Link>
+            {userName && <Nav.Link href="/mypage">My Page</Nav.Link>}
             {userRole === 'ROLE_ADMIN' && (
               <Nav.Link href="/admin">Admin</Nav.Link>
             )}
-            <Nav.Link disabled>{getUserName()}</Nav.Link>
           </Nav>
-          <Button variant="dark" onClick={handleLogout}>
-            Logout
-          </Button>
+          <Nav.Link disabled>{userName}</Nav.Link>
+          {!userName ? (
+            <Button variant="light" onClick={handleLogin}>
+              Login
+            </Button>
+          ) : (
+            <Button variant="dark" onClick={handleLogout}>
+              Logout
+            </Button>
+          )}
         </Navbar.Collapse>
       </Navbar>
     </div>

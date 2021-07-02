@@ -118,7 +118,9 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
               id={id}
               variant="dark"
               disabled={
-                leaderName !== getUserName() || clickedButton === 'present'
+                leaderName !== getUserName() ||
+                clickedButton === 'present' ||
+                clickedButton === 'waitlist'
                   ? true
                   : false
               }

@@ -8,6 +8,7 @@ import ReservationList from '../Components/ReservationList';
 const MyPage = () => {
   const [myReservations, setMyReservations] = useState(null);
   const [allReservations, setAllReservations] = useState([{}, {}, {}, {}]);
+  const [waitReservations, setWaitReservations] = useState(null);
   const [validate, setValidate] = useState(false);
   const [clickedButton, setClickedButton] = useState('future');
 
@@ -30,6 +31,7 @@ const MyPage = () => {
       }).then((response) => {
         setAllReservations(response.data);
         setMyReservations(response.data[1]);
+        setWaitReservations(response.data[3]);
         setToken(response);
         console.log(response.data);
       });
@@ -98,6 +100,28 @@ const MyPage = () => {
         >
           지난 예약
         </Button>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}
+      >
+        {waitReservations !== null && clickedButton === 'future'
+          ? Array.from(waitReservations).map((reservation) => {
+              return (
+                <div>
+                  <ReservationList
+                    reservation={reservation}
+                    setValidate={setValidate}
+                    clickedButton={'waitlist'}
+                  />
+                </div>
+              );
+            })
+          : null}
       </div>
       <div
         style={{
