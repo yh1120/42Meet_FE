@@ -74,11 +74,13 @@ export const isExpiredJwt = (key) => {
 
 const req_headers = {
   'access-token': localStorage.getItem('access-token'),
+  withCredentials: true,
 };
 
 const req_refresh_headers = {
   'access-token': localStorage.getItem('access-token'),
   'refresh-token': localStorage.getItem('refresh-token'),
+  withCredentials: true,
 };
 
 export const getHeaders = () => {
