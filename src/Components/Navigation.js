@@ -6,15 +6,16 @@ import axios from 'axios';
 
 const Navigation = ({ history }) => {
   const [userRole, setUserRole] = useState('ROLE_USER');
+  const [userName, setUserName] = useState('');
 
   const handleLogin = async () => {
-    // window.location.href = 'http://15.164.85.227:8080/login';
     window.location.href = 'http://42meet.kro.kr/login';
   };
 
   const handleLogout = () => {
     localStorage.clear();
-    // history.push('/');
+    setUserName('');
+    history.push('/booking');
   };
 
   const getUserRole = async () => {
@@ -30,26 +31,26 @@ const Navigation = ({ history }) => {
   };
 
   useEffect(() => {
-    // if (userName && getUserName()) getUserInfo();
-    if (getUserName()) getUserRole();
-    // getUserRole();
-  }, []);
+    if (!userName) {
+      setUserName(getUserName());
+      getUserRole();
+    }
+  }, [userName]);
 
   return (
     <div>
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="/">42Meet</Navbar.Brand>
+        <Navbar.Brand href="/booking">42Meet</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/booking">Reservation</Nav.Link>
-            <Nav.Link href="/mypage">My Page</Nav.Link>
+            {userName && <Nav.Link href="/mypage">My Page</Nav.Link>}
             {userRole === 'ROLE_ADMIN' && (
               <Nav.Link href="/admin">Admin</Nav.Link>
             )}
-            <Nav.Link disabled>{getUserName()}</Nav.Link>
           </Nav>
-          {!getUserName() ? (
+          <Nav.Link disabled>{userName}</Nav.Link>
+          {!userName ? (
             <Button variant="light" onClick={handleLogin}>
               Login
             </Button>

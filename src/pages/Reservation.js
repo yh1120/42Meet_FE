@@ -35,7 +35,6 @@ const Reservation = ({ history }) => {
   const [memberArray, setMemberArray] = useState([]);
 
   const initRooms = async () => {
-    // console.log('hi', getHeaders());
     try {
       const rooms_res = await axios.get(
         // 'http://42meet.kro.kr:9100/rooms'
@@ -52,6 +51,7 @@ const Reservation = ({ history }) => {
           { headers: { withCredentials: true } }
         );
         setAlreadyReservations(reservation_res.data);
+
         setToken(reservation_res);
       } catch (err) {
         console.log(err);
@@ -121,6 +121,7 @@ const Reservation = ({ history }) => {
   }, [locations, alreadyReservations]);
 
   useEffect(() => {
+    initRooms();
     let access_token = getCookieValue('access-token');
     let refresh_token = getCookieValue('refresh-token');
 
@@ -129,21 +130,17 @@ const Reservation = ({ history }) => {
       localStorage.setItem('refresh-token', refresh_token);
       document.cookie = 'access-token=; path=/; max-age=0';
       document.cookie = 'refresh-token=; path=/; max-age=0';
-      //   initRooms();
     } else if (
       !localStorage.getItem('access-token') ||
       !localStorage.getItem('refresh-token')
     ) {
       localStorage.clear();
-      console.log('cookie access-token:', access_token);
-      console.log('cookie refresh-token:', refresh_token);
-      console.log(localStorage.getItem('access-token'));
-      console.log(localStorage.getItem('refresh-token'));
-      //   history.push('/');
-      //   window.location.href = '/';
+      // console.log('cookie access-token:', access_token);
+      // console.log('cookie refresh-token:', refresh_token);
+      // console.log(localStorage.getItem('access-token'));
+      // console.log(localStorage.getItem('refresh-token'));
     }
-    initRooms();
-  }, []);
+  });
 
   return (
     <div>
