@@ -45,13 +45,13 @@ const Reservation = ({ history }) => {
       console.log('rooms_res', rooms_res);
       setLocations(rooms_res.data);
       try {
-        const reservation_res = await getReservations(userInput.data);
+        const reservation_res = await getReservations(userInput.date);
         // const reservation_res = await axios.get(
         //   `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
         //   // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
         //   { headers: { withCredentials: true } }
         // );
-        setAlreadyReservations(reservation_res.data);
+        setAlreadyReservations(reservation_res.date);
         setToken(reservation_res);
       } catch (err) {
         console.log(err);
@@ -141,7 +141,7 @@ const Reservation = ({ history }) => {
       // console.log(localStorage.getItem('access-token'));
       // console.log(localStorage.getItem('refresh-token'));
     }
-  });
+  }, []);
 
   return (
     <div>
