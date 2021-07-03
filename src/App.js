@@ -12,9 +12,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" exact component={Login} /> */}
-        <Redirect from="/" to="/booking" />
-        <Route path="/booking" component={Reservation} />
+        <Route exact path="/">
+          <Redirect to="/booking" />
+        </Route>
+        <Route path="/booking" exact component={Reservation} />
         <Route path="/mypage" component={MyPage2} />
         {/* <Route path="/mypage" component={MyPage} /> */}
         <Route path="/admin" component={Admin} />

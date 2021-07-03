@@ -36,6 +36,7 @@ const Reservation = ({ history }) => {
   const [memberArray, setMemberArray] = useState([]);
 
   const initRooms = async () => {
+    console.log('initRooms');
     try {
       const rooms_res = await getRooms();
       // const rooms_res = await axios.get(
@@ -62,6 +63,7 @@ const Reservation = ({ history }) => {
   };
 
   const onChange = async (e) => {
+    console.log('onChange');
     const date = e.target.value;
     try {
       const response = await getReservations(date);
