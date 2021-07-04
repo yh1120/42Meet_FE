@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   getHeaders,
   getUserName,
@@ -10,8 +10,8 @@ import {
 import '../styles/Modal.css';
 import '../styles/ReservationList.css';
 
-const Modal = ({ open, close, header, userInput, members, history }) => {
-  // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
+const Modal = ({ open, close, header, userInput, members }) => {
+  const history = useHistory();
   const {
     location,
     date,
@@ -74,7 +74,14 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
           content: 'content',
           members: members,
         },
-        { headers: getHeaders() }
+        {
+          headers: Object.assign(
+            {
+              withCredentials: true,
+            },
+            getHeaders()
+          ),
+        }
       );
       setToken(response);
       history.push('/mypage');
@@ -114,9 +121,6 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
                 submit
               </button>
             ) : null}
-            {/* <button className="close" onClick={close}>
-              close
-            </button> */}
           </footer>
         </section>
       ) : null}
@@ -124,4 +128,4 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
   );
 };
 
-export default withRouter(Modal);
+export default Modal;

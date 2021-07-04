@@ -1,23 +1,24 @@
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import React from 'react';
-import Login from './pages/Login';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React, { useState } from 'react';
 import Reservation from './pages/Reservation';
 import MyPage from './pages/MyPage';
-import MyPage2 from './pages/MyPage2';
 import NotFound from './pages/NotFound';
 import Admin from './pages/Admin';
+import Navigation from './Components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
+  const [user, setUser] = useState({
+    userName: '',
+    userRole: 'ROLE_USER',
+  });
+
   return (
     <BrowserRouter>
+      <Navigation user={user} setUser={setUser} />
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/booking" />
-        </Route>
-        <Route path="/booking" exact component={Reservation} />
-        <Route path="/mypage" component={MyPage2} />
-        {/* <Route path="/mypage" component={MyPage} /> */}
+        <Route path="/" exact component={Reservation} />
+        <Route path="/mypage" component={MyPage} />
         <Route path="/admin" component={Admin} />
         <Route component={NotFound} />
       </Switch>
