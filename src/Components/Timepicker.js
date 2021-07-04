@@ -22,6 +22,9 @@ const TimePicker = ({ name, reservedTime, userInput, setUserInput }) => {
   };
 
   useEffect(() => {
+    console.log(
+      'Timepicker - useEffect([reservedTime, userInput.roomName, userInput.startTime])'
+    );
     if (reservedTime && userInput.roomName) {
       let time = 23;
       for (let i = 0; i < reservedTime[userInput.roomName].length; i++) {
