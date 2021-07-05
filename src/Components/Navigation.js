@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { getUserName } from '../utils/utils';
 import { getRole } from '../api/api';
 import { getCookieValue } from '../utils/utils';
 
 const Navigation = ({ user, setUser }) => {
+  const history = useHistory();
   const { userName, userRole } = user;
 
   const handleLogin = async () => {
@@ -17,6 +19,7 @@ const Navigation = ({ user, setUser }) => {
       userName: '',
       userRole: 'ROLE_USER',
     });
+    history.push('/');
   };
 
   const getUserRole = async (userName) => {

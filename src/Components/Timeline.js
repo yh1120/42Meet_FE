@@ -1,5 +1,5 @@
 import React from 'react';
-import { getHoursArray } from '../utils/utils';
+import { getHoursArray, getUserName } from '../utils/utils';
 import { Table } from 'react-bootstrap';
 import '../styles/Timeline.css';
 
@@ -13,6 +13,10 @@ const Timeline = ({
   const timeArray = getHoursArray();
 
   const handleClick = (e) => {
+    if (getUserName() === '') {
+      if (window.confirm('로그인을 하시겠습니까?'))
+        window.location.href = 'http://42meet.kro.kr/login';
+    }
     setUserInput({
       ...userInput,
       roomName: e.target.innerText,

@@ -58,9 +58,9 @@ const Modal = ({ open, close, header, userInput, members }) => {
 
   const submit = async () => {
     try {
+      // const response = await registerReservation(userInput);
       const response = await axios.post(
         'http://42meet.kro.kr/reservation/register',
-
         {
           location: location,
           roomName: roomName,

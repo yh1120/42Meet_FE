@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import axios from 'axios';
-import { getHeaders, getUserName, setToken } from '../utils/utils';
+import { getUserName, setToken } from '../utils/utils';
 import MyPageModal from '../Components/MyPageModal';
 import Modal from '../Components/Modal';
 import '../styles/ReservationList.css';
+import { deleteReservation } from '../api/api';
 
-const ReservationList = ({ reservation, clickedButton }) => {
+const ReservationList = ({
+  reservation,
+  clickedButton,
+  handleReservations,
+}) => {
   const reservationIntTime = {
     ...reservation,
     startTime: parseInt(reservation.startTime.slice(0, 2)),
@@ -17,22 +21,12 @@ const ReservationList = ({ reservation, clickedButton }) => {
   const [deleteOpen, setModalOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     try {
-      const i = parseInt(e.target.id);
-      console.log(i);
-      axios({
-        url: 'http://42meet.kro.kr:9100/delete',
-        method: 'POST',
-        headers: getHeaders(),
-        data: {
-          id: i,
-        },
-      }).then((response) => {
-        console.log('응답', response);
-        setToken(response);
-        closeDelete();
-      });
+      const response = await deleteReservation(e.target.id);
+      setToken(response);
+      closeDelete();
+      handleReservations(e.target.id);
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +55,7 @@ const ReservationList = ({ reservation, clickedButton }) => {
         width: '260px',
         border: '1px solid black',
         textAlign: 'center',
-        margin: '3px',
+        margin: '10px',
       }}
     >
       <div className="info">
@@ -104,8 +98,8 @@ const ReservationList = ({ reservation, clickedButton }) => {
               variant="dark"
               disabled={
                 leaderName !== getUserName() ||
-                clickedButton === 'present' ||
-                clickedButton === 'waitlist'
+                clickedButton === 'past' ||
+                clickedButton === 'present'
                   ? true
                   : false
               }
