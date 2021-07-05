@@ -56,8 +56,8 @@ const ReservationForm = ({
       noValidate
       autoComplete="off"
     >
-      <Typography align="center">
-        회의실 명: [{userInput.location} - {userInput.roomName}]
+      <Typography align="center" className="typography">
+        회의실 명: {userInput.location} - {userInput.roomName}
       </Typography>
       <div id="time-picker">
         <TimePicker
@@ -110,7 +110,9 @@ const ReservationForm = ({
         onChange={handleChange}
         value={memberInput}
       />
-      <Typography align="center">팀원 수 : {memberArray.length}</Typography>
+      <Typography align="center" className="typography">
+        팀원 수 : {memberArray.length}
+      </Typography>
       {memberArray.map((member, idx) => {
         return (
           <div id={idx} key={idx} className="member">

@@ -9,7 +9,6 @@ import {
 } from '../utils/utils';
 import '../styles/Modal.css';
 import '../styles/ReservationList.css';
-import { registerReservation } from '../api/api';
 
 const Modal = ({ open, close, header, userInput, members }) => {
   const history = useHistory();

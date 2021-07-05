@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import axios from 'axios';
-import { getHeaders, getUserName, setToken } from '../utils/utils';
+import { getUserName, setToken } from '../utils/utils';
 import MyPageModal from '../Components/MyPageModal';
 import Modal from '../Components/Modal';
 import '../styles/ReservationList.css';
-import { deleteReservations } from '../api/api';
+import { deleteReservation } from '../api/api';
 
-const ReservationList = ({ reservation, clickedButton }) => {
+const ReservationList = ({
+  reservation,
+  clickedButton,
+  handleReservations,
+}) => {
   const reservationIntTime = {
     ...reservation,
     startTime: parseInt(reservation.startTime.slice(0, 2)),
@@ -20,9 +23,10 @@ const ReservationList = ({ reservation, clickedButton }) => {
 
   const handleClick = async (e) => {
     try {
-      const response = await deleteReservations(e.target.id);
+      const response = await deleteReservation(e.target.id);
       setToken(response);
       closeDelete();
+      handleReservations(e.target.id);
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +55,7 @@ const ReservationList = ({ reservation, clickedButton }) => {
         width: '260px',
         border: '1px solid black',
         textAlign: 'center',
-        margin: '3px',
+        margin: '10px',
       }}
     >
       <div className="info">

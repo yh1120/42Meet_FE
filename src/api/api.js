@@ -26,8 +26,10 @@ export const getDateReservations = async (date) => {
 };
 
 export const getMyReservations = async (tag, page) => {
+  let pageBlock = 10;
+  if (tag === 'waiting') pageBlock = 5;
   return await instance.get(
-    `/reservation/mypage/${tag}?currentPage=${page}&pageBlock=10`
+    `/reservation/mypage/${tag}?currentPage=${page}&pageBlock=${pageBlock}`
   );
 };
 
@@ -35,7 +37,7 @@ export const getAllReservations = async (tag) => {
   return await instance.get(`/reservation/admin/${tag}`);
 };
 
-export const deleteReservations = async (id) => {
+export const deleteReservation = async (id) => {
   return await instance.post(`/reservation/delete`, {
     id: id,
   });

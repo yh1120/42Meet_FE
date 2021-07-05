@@ -29,6 +29,7 @@ const MyPage = () => {
       ...buttonColor,
       [e.target.id]: 'dark',
     });
+    setReservations([]);
   };
 
   const getWaitReservations = async () => {
@@ -46,18 +47,8 @@ const MyPage = () => {
       const response = await getMyReservations(clickedButton, page);
       setReservations(response.data.reservations);
       setMaxPage(response.data.maxPage);
-      console.log(response.data);
-
       if (clickedButton === 'scheduled') {
         getWaitReservations();
-        // try {
-        //   const response = await getMyReservations('waiting', waitPage);
-        //   setWaitReservations(response.data.reservationResponseDtos);
-        //   setWaitMaxPage(response.data.maxPage);
-        //   // console.log(response.data.reservationResponseDtos);
-        // } catch (err) {
-        //   console.log(err);
-        // }
       }
     } catch (err) {
       console.log(err);
@@ -65,29 +56,34 @@ const MyPage = () => {
   };
 
   const handlePageChange = (event, value) => {
-    console.log(event, value);
     setPage(value);
   };
 
   const handleWaitPageChange = (event, value) => {
-    console.log(event, value);
     setWaitPage(value);
+  };
+
+  const handleReservations = (id) => {
+    getReservations();
   };
 
   useEffect(() => {
     console.log('Mypage - useEffect([clickedButton])');
     getReservations();
+    setPage(1);
+    setWaitPage(1);
   }, [clickedButton]);
 
   useEffect(() => {
+    console.log('Mypage - useEffect([page])');
     getReservations();
   }, [page]);
 
   useEffect(() => {
+    console.log('Mypage - useEffect([waitPage])');
     getWaitReservations();
   }, [waitPage]);
 
-  useEffect(() => {}, [waitPage]);
   return (
     <div>
       <div id="tag-wrapper">
@@ -109,49 +105,58 @@ const MyPage = () => {
           지난 예약
         </Button>
       </div>
-      <div className="reservation-lists">
-        {Array.from(waitReservations).map((reservation, idx) => {
-          return (
-            <ReservationList
-              key={idx}
-              reservation={reservation}
-              clickedButton={'waitlist'}
+      {clickedButton === 'scheduled' && (
+        <div>
+          <h4>waiting reservation</h4>
+          <div className="reservation-lists">
+            {Array.from(waitReservations).map((reservation, idx) => {
+              return (
+                <ReservationList
+                  key={idx}
+                  reservation={reservation}
+                  clickedButton={'waitlist'}
+                />
+              );
+            })}
+          </div>
+          <div className="pagination-wrapper">
+            <Pagination
+              count={waitMaxPage}
+              variant="outlined"
+              shape="rounded"
+              onChange={handleWaitPageChange}
+              page={waitPage}
             />
-          );
-        })}
-        <Pagination
-          count={waitMaxPage}
-          variant="outlined"
-          shape="rounded"
-          onChange={handleWaitPageChange}
-          page={waitPage}
-        />
-      </div>
-      <div className="reservation-lists">
-        {Array.from(reservations).map((reservation, idx) => {
-          return (
-            <ReservationList
-              key={idx}
-              reservation={reservation}
-              clickedButton={clickedButton}
-            />
-          );
-        })}
-      </div>
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '10px',
-          width: '100%',
-        }}
-      >
-        <Pagination
-          count={maxPage}
-          variant="outlined"
-          shape="rounded"
-          onChange={handlePageChange}
-          page={page}
-        />
+          </div>
+        </div>
+      )}
+
+      <div>
+        <h4>{clickedButton} reservation</h4>
+        <div className="reservation-lists">
+          {reservations.length === 0 && (
+            <div className="no-reservation">No reservation!</div>
+          )}
+          {Array.from(reservations).map((reservation, idx) => {
+            return (
+              <ReservationList
+                key={idx}
+                reservation={reservation}
+                clickedButton={clickedButton}
+                handleReservations={handleReservations}
+              />
+            );
+          })}
+        </div>
+        <div className="pagination-wrapper">
+          <Pagination
+            count={maxPage}
+            variant="outlined"
+            shape="rounded"
+            onChange={handlePageChange}
+            page={page}
+          />
+        </div>
       </div>
     </div>
   );
