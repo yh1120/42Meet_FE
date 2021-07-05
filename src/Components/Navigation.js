@@ -1,39 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { getUserName } from '../utils/utils';
-import axios from 'axios';
+import { getRole } from '../api/api';
+import { getCookieValue } from '../utils/utils';
 
-const Navigation = ({ history }) => {
-  const [userRole, setUserRole] = useState('ROLE_USER');
+const Navigation = ({ user, setUser }) => {
+  const { userName, userRole } = user;
 
   const handleLogin = async () => {
-    // window.location.href = 'http://15.164.85.227:8080/login';
     window.location.href = 'http://42meet.kro.kr/login';
   };
 
   const handleLogout = () => {
     localStorage.clear();
-    // history.push('/');
+    setUser({
+      userName: '',
+      userRole: 'ROLE_USER',
+    });
   };
 
-  const getUserRole = async () => {
+  const getUserRole = async (userName) => {
     try {
-      const response = await axios.get(
-        `http://42meet.kro.kr/member/${getUserName()}/role`,
-        { headers: { withCredentials: true } }
-      );
-      setUserRole(response.data);
+      const response = await getRole(userName);
+      setUser({
+        userName: userName,
+        userRole: response.data,
+      });
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    // if (userName && getUserName()) getUserInfo();
-    if (getUserName()) getUserRole();
-    // getUserRole();
+    console.log('Navagaion - useEffect([])');
+    if (
+      !localStorage.getItem('access-token') ||
+      !localStorage.getItem('refresh-token')
+    ) {
+      handleLogout();
+    } else if (!userName) {
+      getUserRole(getUserName());
+    }
   }, []);
+
+  useEffect(() => {
+    console.log('Navigation - useEffect()');
+    let access_token = getCookieValue('access-token');
+    let refresh_token = getCookieValue('refresh-token');
+
+    if (access_token && refresh_token) {
+      localStorage.setItem('access-token', access_token);
+      localStorage.setItem('refresh-token', refresh_token);
+      document.cookie = 'access-token=; path=/; max-age=0';
+      document.cookie = 'refresh-token=; path=/; max-age=0';
+    } else if (
+      !localStorage.getItem('access-token') ||
+      !localStorage.getItem('refresh-token')
+    ) {
+      localStorage.clear();
+    }
+  });
 
   return (
     <div>
@@ -42,14 +68,13 @@ const Navigation = ({ history }) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/booking">Reservation</Nav.Link>
-            <Nav.Link href="/mypage">My Page</Nav.Link>
+            {userName && <Nav.Link href="/mypage">My Page</Nav.Link>}
             {userRole === 'ROLE_ADMIN' && (
               <Nav.Link href="/admin">Admin</Nav.Link>
             )}
-            <Nav.Link disabled>{getUserName()}</Nav.Link>
           </Nav>
-          {!getUserName() ? (
+          <Nav.Link disabled>{userName}</Nav.Link>
+          {!userName ? (
             <Button variant="light" onClick={handleLogin}>
               Login
             </Button>
@@ -64,4 +89,4 @@ const Navigation = ({ history }) => {
   );
 };
 
-export default withRouter(Navigation);
+export default Navigation;

@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 import Timeline from '../Components/Timeline';
 import ReservationForm from '../Components/ReservationForm';
-import Navigation from '../Components/Navigation';
-import {
-  range,
-  getAFewDaysLater,
-  getCookieValue,
-  getHeaders,
-  setToken,
-} from '../utils/utils';
+import { range, getAFewDaysLater, setToken } from '../utils/utils';
 import Modal from '../Components/Modal';
+import { getDateReservations, getRooms } from '../api/api';
 import '../styles/Reservation.css';
 
-const Reservation = ({ history }) => {
+const Reservation = () => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
   const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
 
@@ -35,22 +27,21 @@ const Reservation = ({ history }) => {
   const [memberArray, setMemberArray] = useState([]);
 
   const initRooms = async () => {
-    // console.log('hi', getHeaders());
+    console.log('initRooms');
     try {
-      const rooms_res = await axios.get(
-        // 'http://42meet.kro.kr:9100/rooms'
-        'http://42meet.kro.kr/reservation/rooms',
-        { headers: { withCredentials: true } }
-      );
-      console.log('rooms_res', rooms_res);
-
+      const rooms_res = await getRooms();
+      // const rooms_res = await axios.get(
+      //   'http://42meet.kro.kr/reservation/rooms',
+      //   { headers: { withCredentials: true } }
+      // );
       setLocations(rooms_res.data);
       try {
-        const reservation_res = await axios.get(
-          `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
-          // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
-          { headers: { withCredentials: true } }
-        );
+        const reservation_res = await getDateReservations(userInput.date);
+        // const reservation_res = await axios.get(
+        //   `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
+        //   // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
+        //   { headers: { withCredentials: true } }
+        // );
         setAlreadyReservations(reservation_res.data);
         setToken(reservation_res);
       } catch (err) {
@@ -62,13 +53,15 @@ const Reservation = ({ history }) => {
   };
 
   const onChange = async (e) => {
+    console.log('onChange');
     const date = e.target.value;
     try {
-      const response = await axios.get(
-        `http://42meet.kro.kr/reservation/list?date=${date}`,
-        // `http://42meet.kro.kr/reservation/list?date=${date}`,
-        { headers: getHeaders() }
-      );
+      const response = await getDateReservations(date);
+      // const response = await axios.get(
+      //   `http://42meet.kro.kr/reservation/list?date=${date}`,
+      //   // `http://42meet.kro.kr/reservation/list?date=${date}`,
+      //   { headers: getHeaders() }
+      // );
       setAlreadyReservations(response.data);
       setUserInput({
         ...userInput,
@@ -96,6 +89,7 @@ const Reservation = ({ history }) => {
   };
 
   useEffect(() => {
+    console.log('Reservation - useEffect([locations, alreadyReservatoins)');
     const getReservedTime = (data) => {
       const temp = {};
       locations.forEach((table) => {
@@ -121,33 +115,12 @@ const Reservation = ({ history }) => {
   }, [locations, alreadyReservations]);
 
   useEffect(() => {
-    let access_token = getCookieValue('access-token');
-    let refresh_token = getCookieValue('refresh-token');
-
-    if (access_token && refresh_token) {
-      localStorage.setItem('access-token', access_token);
-      localStorage.setItem('refresh-token', refresh_token);
-      document.cookie = 'access-token=; path=/; max-age=0';
-      document.cookie = 'refresh-token=; path=/; max-age=0';
-      //   initRooms();
-    } else if (
-      !localStorage.getItem('access-token') ||
-      !localStorage.getItem('refresh-token')
-    ) {
-      localStorage.clear();
-      console.log('cookie access-token:', access_token);
-      console.log('cookie refresh-token:', refresh_token);
-      console.log(localStorage.getItem('access-token'));
-      console.log(localStorage.getItem('refresh-token'));
-      //   history.push('/');
-      //   window.location.href = '/';
-    }
+    console.log('Reservation - useEffect([])');
     initRooms();
   }, []);
 
   return (
     <div>
-      <Navigation />
       <div id="reservation-wrapper">
         <div>
           <div id="datepicker-wrapper">
@@ -194,4 +167,4 @@ const Reservation = ({ history }) => {
   );
 };
 
-export default withRouter(Reservation);
+export default Reservation;

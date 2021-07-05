@@ -1,151 +1,143 @@
 import React, { useState, useEffect } from 'react';
-import Navigation from '../Components/Navigation';
-import axios from 'axios';
-import { getHeaders, setToken } from '../utils/utils';
+import { Pagination } from '@material-ui/lab';
 import { Button } from 'react-bootstrap';
 import ReservationList from '../Components/ReservationList';
+import { getMyReservations } from '../api/api';
+import '../styles/MyPage.css';
 
 const MyPage = () => {
-  const [myReservations, setMyReservations] = useState(null);
-  const [allReservations, setAllReservations] = useState([{}, {}, {}, {}]);
-  const [waitReservations, setWaitReservations] = useState(null);
-  const [validate, setValidate] = useState(false);
-  const [clickedButton, setClickedButton] = useState('future');
-
   const buttonColor = {
-    past: 'secondary',
-    present: 'secondary',
-    future: 'secondary',
+    progress: 'secondary',
+    scheduled: 'secondary',
+    expired: 'secondary',
   };
+
+  const [clickedButton, setClickedButton] = useState('scheduled');
+  const [reservations, setReservations] = useState([]);
+  const [waitReservations, setWaitReservations] = useState([]);
   const [colorForm, setColorForm] = useState({
     ...buttonColor,
     [clickedButton]: 'dark',
   });
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
+  // const [waitPage, setWaitPage] = useState(1);
+
+  const handleClick = (e) => {
+    setClickedButton(e.target.id);
+    setColorForm({
+      ...buttonColor,
+      [e.target.id]: 'dark',
+    });
+  };
 
   const getReservations = async () => {
     try {
-      axios({
-        url: 'http://42meet.kro.kr:9100/mypage',
-        method: 'GET',
-        headers: getHeaders(),
-      }).then((response) => {
-        setAllReservations(response.data);
-        setMyReservations(response.data[1]);
-        setWaitReservations(response.data[3]);
-        setToken(response);
-        console.log(response.data);
-      });
-      setValidate(false);
+      const response = await getMyReservations(clickedButton, page);
+      setReservations(response.data.reservationResponseDtos);
+      setMaxPage(response.data.maxPage);
+      console.log(response.data);
+
+      if (clickedButton === 'scheduled') {
+        try {
+          const response = await getMyReservations('waiting', 1);
+          setWaitReservations(response.data.reservationResponseDtos);
+          // console.log(response.data.reservationResponseDtos);
+        } catch (err) {
+          console.log(err);
+        }
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleList = (e) => {
-    const id = e.target.id;
-    setClickedButton(id);
-    setColorForm({
-      ...buttonColor,
-      [id]: 'dark',
-    });
-    if (id === 'past') {
-      console.log('past');
-      setMyReservations(allReservations[2]);
-    } else if (id === 'present') {
-      console.log('present');
-      setMyReservations(allReservations[0]);
-    } else {
-      console.log('future');
-      setMyReservations(allReservations[1]);
-    }
+  const handlePageChange = (event, value) => {
+    console.log(event, value);
+    setPage(value);
   };
 
+  // const handleWaitPageChange = (event, value) => {
+  //   console.log(event, value);
+  //   setWaitPage(value);
+  // };
+
   useEffect(() => {
-    if (myReservations === null || validate === true) {
-      getReservations();
-    }
-  }, [myReservations, validate]);
+    console.log('Mypage - useEffect([clickedButton])');
+    getReservations();
+  }, [clickedButton]);
+
+  // useEffect(() => {
+  //   getReservations();
+  // }, [page]);
 
   return (
     <div>
-      <Navigation />
-      <div
-        style={{
-          display: 'flex',
-          margin: '10px 10px 10px 10px',
-          justifyContent: 'space-around',
-        }}
-      >
+      <div id="tag-wrapper">
         <Button
-          id="present"
-          variant={colorForm.present}
-          style={{ width: '115px' }}
-          onClick={handleList}
+          id="progress"
+          variant={colorForm.progress}
+          onClick={handleClick}
         >
           진행중인 예약
         </Button>
         <Button
-          id="future"
-          variant={colorForm.future}
-          style={{ width: '115px' }}
-          onClick={handleList}
+          id="scheduled"
+          variant={colorForm.scheduled}
+          onClick={handleClick}
         >
           다가올 예약
         </Button>
-        <Button
-          id="past"
-          variant={colorForm.past}
-          style={{ width: '115px' }}
-          onClick={handleList}
-        >
+        <Button id="expired" variant={colorForm.expired} onClick={handleClick}>
           지난 예약
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}
-      >
-        {waitReservations !== null && clickedButton === 'future'
-          ? Array.from(waitReservations).map((reservation) => {
-              return (
-                <div>
-                  <ReservationList
-                    reservation={reservation}
-                    setValidate={setValidate}
-                    clickedButton={'waitlist'}
-                  />
-                </div>
-              );
-            })
-          : null}
+      <div className="reservation-lists">
+        {Array.from(waitReservations).map((reservation, idx) => {
+          return (
+            <ReservationList
+              key={idx}
+              reservation={reservation}
+              clickedButton={'waitlist'}
+            />
+          );
+        })}
+        {/* <Pagination
+          count={10}
+          variant="outlined"
+          shape="rounded"
+          onChange={handleWaitPageChange}
+          page={waitPage}
+        /> */}
+      </div>
+      <div className="reservation-lists">
+        {Array.from(reservations).map((reservation, idx) => {
+          return (
+            <ReservationList
+              key={idx}
+              reservation={reservation}
+              clickedButton={clickedButton}
+            />
+          );
+        })}
       </div>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
+          position: 'fixed',
+          bottom: '10px',
+          width: '100%',
         }}
       >
-        {myReservations !== null
-          ? Array.from(myReservations).map((reservation) => {
-              return (
-                <div>
-                  <ReservationList
-                    reservation={reservation}
-                    setValidate={setValidate}
-                    clickedButton={clickedButton}
-                  />
-                </div>
-              );
-            })
-          : null}
+        <Pagination
+          count={maxPage}
+          variant="outlined"
+          shape="rounded"
+          onChange={handlePageChange}
+          page={page}
+        />
       </div>
     </div>
   );
 };
+
 export default MyPage;

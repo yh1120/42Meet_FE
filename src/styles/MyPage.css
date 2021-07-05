@@ -1,0 +1,15 @@
+#tag-wrapper {
+  display: flex;
+  margin: 10px 0;
+  justify-content: space-around;
+}
+
+#tag-wrapper Button {
+  width: 115px;
+}
+
+.reservation-lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
