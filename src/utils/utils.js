@@ -84,6 +84,7 @@ const req_refresh_headers = {
 };
 
 export const getHeaders = () => {
+  if (!localStorage.getItem('access-token')) return {};
   let headers = !isExpiredJwt('access-token')
     ? req_headers
     : req_refresh_headers;

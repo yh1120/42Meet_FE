@@ -1,7 +1,6 @@
 import React from 'react';
 // import axios from 'axios';
 // import jwtDecode from 'jwt-decode';
-import { withRouter } from 'react-router-dom';
 // import { getHeaders, setTimeFormat, setToken } from '../utils/utils';
 import '../styles/Modal.css';
 
@@ -36,4 +35,4 @@ const Modal = ({ open, close, header, handleClick, id }) => {
   );
 };
 
-export default withRouter(Modal);
+export default Modal;

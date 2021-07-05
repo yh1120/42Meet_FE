@@ -23,6 +23,13 @@ const MyPage = () => {
   const [maxPage, setMaxPage] = useState(1);
   const [waitPage, setWaitPage] = useState(1);
   const [waitMaxPage, setWaitMaxPage] = useState(1);
+  const handleClick = (e) => {
+    setClickedButton(e.target.id);
+    setColorForm({
+      ...buttonColor,
+      [e.target.id]: 'dark',
+    });
+  };
 
   const handleClick = (e) => {
     setClickedButton(e.target.id);
@@ -74,11 +81,22 @@ const MyPage = () => {
     console.log(event, value);
     setWaitPage(value);
   };
+=======
+  const handlePageChange = (event, value) => {
+    console.log(event, value);
+    setPage(value);
+  };
+
+  // const handleWaitPageChange = (event, value) => {
+  //   console.log(event, value);
+  //   setWaitPage(value);
+  // };
 
   useEffect(() => {
     console.log('Mypage - useEffect([clickedButton])');
     getReservations();
   }, [clickedButton]);
+
 
   useEffect(() => {
     getReservations();

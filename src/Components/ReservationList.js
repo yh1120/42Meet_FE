@@ -7,7 +7,7 @@ import Modal from '../Components/Modal';
 import '../styles/ReservationList.css';
 import { deleteReservations } from '../api/api';
 
-const ReservationList = ({ reservation, setValidate, clickedButton }) => {
+const ReservationList = ({ reservation, clickedButton }) => {
   const reservationIntTime = {
     ...reservation,
     startTime: parseInt(reservation.startTime.slice(0, 2)),
@@ -52,7 +52,6 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
         border: '1px solid black',
         textAlign: 'center',
         margin: '3px',
-        // alignContent: 'space-between',
       }}
     >
       <div className="info">
@@ -75,20 +74,7 @@ const ReservationList = ({ reservation, setValidate, clickedButton }) => {
       </div>
       <div className="info">
         <div className="tag">인원</div>
-        <div
-          style={{
-            // display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-          }}
-        >
-          {members.length}명
-          {/* {members.map((member, m_idx) => {
-            return leaderName !== member ? (
-              <div key={m_idx}>{member} </div>
-            ) : null;
-          })} */}
-        </div>
+        <div>{members.length}명</div>
       </div>
       <div>
         <div
