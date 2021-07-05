@@ -5,6 +5,7 @@ import { getHeaders, getUserName, setToken } from '../utils/utils';
 import MyPageModal from '../Components/MyPageModal';
 import Modal from '../Components/Modal';
 import '../styles/ReservationList.css';
+import { deleteReservations } from '../api/api';
 
 const ReservationList = ({ reservation, clickedButton }) => {
   const reservationIntTime = {
@@ -17,22 +18,11 @@ const ReservationList = ({ reservation, clickedButton }) => {
   const [deleteOpen, setModalOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     try {
-      const i = parseInt(e.target.id);
-      console.log(i);
-      axios({
-        url: 'http://42meet.kro.kr:9100/delete',
-        method: 'POST',
-        headers: getHeaders(),
-        data: {
-          id: i,
-        },
-      }).then((response) => {
-        console.log('응답', response);
-        setToken(response);
-        closeDelete();
-      });
+      const response = await deleteReservations(e.target.id);
+      setToken(response);
+      closeDelete();
     } catch (err) {
       console.log(err);
     }
@@ -104,8 +94,8 @@ const ReservationList = ({ reservation, clickedButton }) => {
               variant="dark"
               disabled={
                 leaderName !== getUserName() ||
-                clickedButton === 'present' ||
-                clickedButton === 'waitlist'
+                clickedButton === 'past' ||
+                clickedButton === 'present'
                   ? true
                   : false
               }

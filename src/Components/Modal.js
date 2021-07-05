@@ -9,6 +9,7 @@ import {
 } from '../utils/utils';
 import '../styles/Modal.css';
 import '../styles/ReservationList.css';
+import { registerReservation } from '../api/api';
 
 const Modal = ({ open, close, header, userInput, members }) => {
   const history = useHistory();
@@ -58,9 +59,9 @@ const Modal = ({ open, close, header, userInput, members }) => {
 
   const submit = async () => {
     try {
+      // const response = await registerReservation(userInput);
       const response = await axios.post(
         'http://42meet.kro.kr/reservation/register',
-
         {
           location: location,
           roomName: roomName,
