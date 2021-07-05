@@ -67,6 +67,10 @@ const MyPage = () => {
     getReservations();
   };
 
+  const handleWaitReservations = (id) => {
+    getWaitReservations();
+  };
+
   useEffect(() => {
     console.log('Mypage - useEffect([clickedButton])');
     getReservations();
@@ -115,6 +119,7 @@ const MyPage = () => {
                   key={idx}
                   reservation={reservation}
                   clickedButton={'waitlist'}
+                  handleReservations={handleWaitReservations}
                 />
               );
             })}
