@@ -9,6 +9,7 @@ import {
 } from '../utils/utils';
 import '../styles/Modal.css';
 import '../styles/ReservationList.css';
+import { registerReservation } from '../api/api';
 
 const Modal = ({ open, close, header, userInput, members, history }) => {
   // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
@@ -58,9 +59,9 @@ const Modal = ({ open, close, header, userInput, members, history }) => {
 
   const submit = async () => {
     try {
+      // const response = await registerReservation(userInput);
       const response = await axios.post(
         'http://42meet.kro.kr/reservation/register',
-
         {
           location: location,
           roomName: roomName,
