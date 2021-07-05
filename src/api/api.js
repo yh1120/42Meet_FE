@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { getHeaders } from '../utils/utils';
+import { getHeaders, getUserName, setTimeFormat } from '../utils/utils';
+
 const apiUrl = 'http://42meet.kro.kr';
 
 const unauth_instance = axios.create({
@@ -32,4 +33,26 @@ export const getMyReservations = async (tag, page) => {
 
 export const getAllReservations = async (tag) => {
   return await instance.get(`/reservation/admin/${tag}`);
+};
+
+export const deleteReservations = async (id) => {
+  return await instance.post(`/reservation/delete`, {
+    id: id,
+  });
+};
+
+export const registerReservation = async (userInput) => {
+  return await instance.post(`/reservation/register`, {
+    location: userInput.location,
+    roomName: userInput.roomName,
+    date: userInput.date,
+    startTime: setTimeFormat(userInput.startTime, 'start'),
+    endTime: setTimeFormat(userInput.endTime, 'end'),
+    leaderName: getUserName(),
+    department: userInput.department,
+    purpose: userInput.purpose,
+    title: userInput.title,
+    content: 'content',
+    members: userInput.members,
+  });
 };
