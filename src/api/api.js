@@ -33,8 +33,25 @@ export const getMyReservations = async (tag, page) => {
   );
 };
 
-export const getAllReservations = async (tag) => {
-  return await instance.get(`/reservation/admin/${tag}`);
+export const getAllReservations = async (tag, page, pageBlock) => {
+  return await instance.get(
+    `/reservation/admin/${tag}?currentPage=${page}&pageBlock=${pageBlock}`
+  );
+};
+
+export const getAllWaitingReservations = async () => {
+  return await instance.get('/reservation/admin/waiting');
+};
+
+// export const getAllReservations = async (tag) => {
+//   return await instance.get(`/reservation/admin/${tag}`);
+// };
+
+export const decideReservation = async (id, result) => {
+  return await instance.post('/reservation/admin/decide', {
+    id: id,
+    result: result,
+  });
 };
 
 export const deleteReservation = async (id) => {

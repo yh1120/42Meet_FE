@@ -29,6 +29,7 @@ const MyPage = () => {
       ...buttonColor,
       [e.target.id]: 'dark',
     });
+    setPage(1);
     setReservations([]);
   };
 
@@ -92,18 +93,18 @@ const MyPage = () => {
     <div>
       <div id="tag-wrapper">
         <Button
-          id="progress"
-          variant={colorForm.progress}
-          onClick={handleClick}
-        >
-          진행중인 예약
-        </Button>
-        <Button
           id="scheduled"
           variant={colorForm.scheduled}
           onClick={handleClick}
         >
           다가올 예약
+        </Button>
+        <Button
+          id="progress"
+          variant={colorForm.progress}
+          onClick={handleClick}
+        >
+          진행중인 예약
         </Button>
         <Button id="expired" variant={colorForm.expired} onClick={handleClick}>
           지난 예약
@@ -113,7 +114,7 @@ const MyPage = () => {
         <div>
           <h4>waiting reservation</h4>
           <div className="reservation-lists">
-            {Array.from(waitReservations).map((reservation, idx) => {
+            {waitReservations && Array.from(waitReservations).map((reservation, idx) => {
               return (
                 <ReservationList
                   key={idx}
@@ -142,7 +143,7 @@ const MyPage = () => {
           {reservations.length === 0 && (
             <div className="no-reservation">No reservation!</div>
           )}
-          {Array.from(reservations).map((reservation, idx) => {
+          {reservations && Array.from(reservations).map((reservation, idx) => {
             return (
               <ReservationList
                 key={idx}
