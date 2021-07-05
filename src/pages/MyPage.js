@@ -29,6 +29,7 @@ const MyPage = () => {
       ...buttonColor,
       [e.target.id]: 'dark',
     });
+    setPage(1);
   };
 
   const getReservations = async () => {
@@ -75,33 +76,34 @@ const MyPage = () => {
     <div>
       <div id="tag-wrapper">
         <Button
-          id="progress"
-          variant={colorForm.progress}
-          onClick={handleClick}
-        >
-          진행중인 예약
-        </Button>
-        <Button
           id="scheduled"
           variant={colorForm.scheduled}
           onClick={handleClick}
         >
           다가올 예약
         </Button>
+        <Button
+          id="progress"
+          variant={colorForm.progress}
+          onClick={handleClick}
+        >
+          진행중인 예약
+        </Button>
         <Button id="expired" variant={colorForm.expired} onClick={handleClick}>
           지난 예약
         </Button>
       </div>
       <div className="reservation-lists">
-        {Array.from(waitReservations).map((reservation, idx) => {
-          return (
-            <ReservationList
-              key={idx}
-              reservation={reservation}
-              clickedButton={'waitlist'}
-            />
-          );
-        })}
+        {waitReservations &&
+          Array.from(waitReservations).map((reservation, idx) => {
+            return (
+              <ReservationList
+                key={idx}
+                reservation={reservation}
+                clickedButton={'waitlist'}
+              />
+            );
+          })}
         {/* <Pagination
           count={10}
           variant="outlined"
@@ -111,15 +113,16 @@ const MyPage = () => {
         /> */}
       </div>
       <div className="reservation-lists">
-        {Array.from(reservations).map((reservation, idx) => {
-          return (
-            <ReservationList
-              key={idx}
-              reservation={reservation}
-              clickedButton={clickedButton}
-            />
-          );
-        })}
+        {reservations &&
+          Array.from(reservations).map((reservation, idx) => {
+            return (
+              <ReservationList
+                key={idx}
+                reservation={reservation}
+                clickedButton={clickedButton}
+              />
+            );
+          })}
       </div>
       <div
         style={{
