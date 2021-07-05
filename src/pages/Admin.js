@@ -63,7 +63,6 @@ const Admin = () => {
 
   return (
     <div className="main">
-      <Navigation />
       <div
         style={{
           display: 'flex',
