@@ -1,5 +1,6 @@
 import React from 'react';
 import { getHoursArray, getUserName } from '../utils/utils';
+import { useHistory } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import '../styles/Timeline.css';
 
@@ -12,10 +13,22 @@ const Timeline = ({
 }) => {
   const timeArray = getHoursArray();
 
+  const history = useHistory();
   const handleClick = (e) => {
     if (getUserName() === '') {
-      if (window.confirm('로그인을 하시겠습니까?'))
-        window.location.href = 'http://42meet.kro.kr/login';
+      if (window.confirm('로그인을 하시겠습니까?')) {
+        // window.location.href = 'http://42meet.kro.kr/login';
+        localStorage.setItem(
+          'access-token',
+          'eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjU0OTAwMjUsImV4cCI6MTYyNTU3NjQyNSwic3ViIjoianVobGVlIn0.3MiEk1lZPYpodnkR_TcQf2PqPiQ5hfMXyvke3X7n4XY'
+        );
+        localStorage.setItem(
+          'refresh-token',
+          'eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjU0OTAwMjUsImV4cCI6MTYyNjY5OTYyNX0.eV4L_8Qr2oM8g7NqSUoSWHim_Ms6cicTq4WtBsn7j9Q'
+        );
+        history.push('/');
+        // window.location.href = '/';
+      }
     }
     setUserInput({
       ...userInput,

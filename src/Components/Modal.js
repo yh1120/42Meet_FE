@@ -7,6 +7,7 @@ import {
   setTimeFormat,
   setToken,
 } from '../utils/utils';
+import { registerReservation } from '../api/api';
 import '../styles/Modal.css';
 import '../styles/ReservationList.css';
 
@@ -84,10 +85,19 @@ const Modal = ({ open, close, header, userInput, members }) => {
         }
       );
       setToken(response);
+      alert('예약 성공!');
       history.push('/mypage');
     } catch (err) {
-      if (err.statusCode === 400) {
+      console.log(err);
+      if (err.response.status === 401) {
+        alert('오류가 발생했습니다. 다시 로그인해주세요.');
         close();
+        window.location.reload();
+      } else if (err.response.status === 409) {
+        alert('시간이 중복됩니다. 다른 시간대를 선택해주세요.');
+        window.location.reload();
+      } else if (err.response.status === 442) {
+        alert('예약 가능 횟수를 초과했습니다.');
       }
     }
   };

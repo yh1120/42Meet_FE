@@ -6,7 +6,7 @@ import Modal from '../Components/Modal';
 import { getDateReservations, getRooms } from '../api/api';
 import '../styles/Reservation.css';
 
-const Reservation = () => {
+const Reservation = ({ user, setUser }) => {
   const minDate = getAFewDaysLater(7).toISOString().substring(0, 10);
   const maxDate = getAFewDaysLater(20).toISOString().substring(0, 10);
 
@@ -30,18 +30,9 @@ const Reservation = () => {
     console.log('initRooms');
     try {
       const rooms_res = await getRooms();
-      // const rooms_res = await axios.get(
-      //   'http://42meet.kro.kr/reservation/rooms',
-      //   { headers: { withCredentials: true } }
-      // );
       setLocations(rooms_res.data);
       try {
         const reservation_res = await getDateReservations(userInput.date);
-        // const reservation_res = await axios.get(
-        //   `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
-        //   // `http://42meet.kro.kr/reservation/list?date=${userInput.date}`,
-        //   { headers: { withCredentials: true } }
-        // );
         setAlreadyReservations(reservation_res.data);
         setToken(reservation_res);
       } catch (err) {
@@ -57,11 +48,6 @@ const Reservation = () => {
     const date = e.target.value;
     try {
       const response = await getDateReservations(date);
-      // const response = await axios.get(
-      //   `http://42meet.kro.kr/reservation/list?date=${date}`,
-      //   // `http://42meet.kro.kr/reservation/list?date=${date}`,
-      //   { headers: getHeaders() }
-      // );
       setAlreadyReservations(response.data);
       setUserInput({
         ...userInput,

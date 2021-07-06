@@ -17,7 +17,11 @@ const App = () => {
     <BrowserRouter>
       <Navigation user={user} setUser={setUser} />
       <Switch>
-        <Route path="/" exact component={Reservation} />
+        <Route
+          path="/"
+          exact
+          render={() => <Reservation user={user} setUser={setUser} />}
+        />
         <Route path="/mypage" component={MyPage} />
         <Route path="/admin" component={Admin} />
         <Route component={NotFound} />
