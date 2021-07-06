@@ -85,7 +85,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
         }
       );
       setToken(response);
-      alert('예약 성공!');
+      alert('예약이 관리자에게 승인되면 활성화 됩니다!');
       history.push('/mypage');
     } catch (err) {
       console.log(err);
