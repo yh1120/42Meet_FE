@@ -1,0 +1,18 @@
+.adminList {
+  height: 50px;
+}
+
+.adminList .title {
+  display: flex;
+  height: 150px;
+}
+
+.adminList .title .title__in {
+  text-align: center;
+  width: 300px;
+}
+
+.adminList .title .title__in .title__props {
+  display: flex;
+  justify-content: center;
+}

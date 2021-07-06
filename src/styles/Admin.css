@@ -1,5 +1,5 @@
 .main {
-  background-color: #eafbac;
+  /* background-color: #eafbac; */
   height: 800px;
 }
 
@@ -9,13 +9,13 @@
   /* flex-wrap: wrap; */
   /* justify-content: center; */
   height: 70%;
-  background-color: orange;
+  /* background-color: orange; */
 }
 
 .main .reservationList .title {
   display: flex;
   justify-content: space-around;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
   height: 8%;
 }
 
@@ -26,11 +26,11 @@
 .main .reservationList .title .title__props {
   padding: 5px;
   text-align: center;
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
 }
 
 .main .pageButton {
   display: flex;
-  background-color: palevioletred;
+  /* background-color: palevioletred; */
   height: 50px;
 }
