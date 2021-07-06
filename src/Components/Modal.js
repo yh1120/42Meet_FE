@@ -96,7 +96,7 @@ const Modal = ({ open, close, header, userInput, members }) => {
       } else if (err.response.status === 409) {
         alert('시간이 중복됩니다. 다른 시간대를 선택해주세요.');
         window.location.reload();
-      } else if (err.response.status === 442) {
+      } else if (err.response.status === 416) {
         alert('예약 가능 횟수를 초과했습니다.');
       }
     }
