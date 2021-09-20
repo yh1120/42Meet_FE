@@ -73,19 +73,19 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    console.log('Mypage - useEffect([clickedButton])');
+    // console.log('Mypage - useEffect([clickedButton])');
     getReservations();
     setPage(1);
     setWaitPage(1);
   }, [clickedButton]);
 
   useEffect(() => {
-    console.log('Mypage - useEffect([page])');
+    // console.log('Mypage - useEffect([page])');
     getReservations();
   }, [page]);
 
   useEffect(() => {
-    console.log('Mypage - useEffect([waitPage])');
+    // console.log('Mypage - useEffect([waitPage])');
     getWaitReservations();
   }, [waitPage]);
 
@@ -114,16 +114,17 @@ const MyPage = () => {
         <div>
           <h4>waiting reservation</h4>
           <div className="reservation-lists">
-            {waitReservations && Array.from(waitReservations).map((reservation, idx) => {
-              return (
-                <ReservationList
-                  key={idx}
-                  reservation={reservation}
-                  clickedButton={'waitlist'}
-                  handleReservations={handleWaitReservations}
-                />
-              );
-            })}
+            {waitReservations &&
+              Array.from(waitReservations).map((reservation, idx) => {
+                return (
+                  <ReservationList
+                    key={idx}
+                    reservation={reservation}
+                    clickedButton={'waitlist'}
+                    handleReservations={handleWaitReservations}
+                  />
+                );
+              })}
           </div>
           <div className="pagination-wrapper">
             <Pagination
@@ -143,16 +144,17 @@ const MyPage = () => {
           {reservations.length === 0 && (
             <div className="no-reservation">No reservation!</div>
           )}
-          {reservations && Array.from(reservations).map((reservation, idx) => {
-            return (
-              <ReservationList
-                key={idx}
-                reservation={reservation}
-                clickedButton={clickedButton}
-                handleReservations={handleReservations}
-              />
-            );
-          })}
+          {reservations &&
+            Array.from(reservations).map((reservation, idx) => {
+              return (
+                <ReservationList
+                  key={idx}
+                  reservation={reservation}
+                  clickedButton={clickedButton}
+                  handleReservations={handleReservations}
+                />
+              );
+            })}
         </div>
         <div className="pagination-wrapper">
           <Pagination

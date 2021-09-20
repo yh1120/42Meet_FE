@@ -25,13 +25,13 @@ const AdminList = ({
   const { date, startTime, endTime, roomName, id } = reservationIntTime;
   const [detailOpen, setDetailOpen] = useState(false);
 
-  console.log('reservationIntTime', reservationIntTime, id);
+  //   console.log('reservationIntTime', reservationIntTime, id);
   const access = async (e) => {
-    console.log('access');
-    console.log(e);
-    console.log(e.target.id, typeof e.target.id);
+    // console.log('access');
+    // console.log(e);
+    // console.log(e.target.id, typeof e.target.id);
     const i = parseInt(e.target.id);
-    console.log(i);
+    // console.log(i);
     try {
       const response = await axios.post(
         'http://42meet.kro.kr/reservation/admin/decide',
@@ -48,7 +48,7 @@ const AdminList = ({
           ),
         }
       );
-      console.log('access', response);
+      //   console.log('access', response);
       let cnt = 0;
       if (response.status === 200) {
         Array.from(waitingAllReservations).forEach((reservation) => {
@@ -80,7 +80,7 @@ const AdminList = ({
   const deny = async (e) => {
     try {
       const i = parseInt(e.target.id);
-      console.log(i);
+      //   console.log(i);
       const response = await decideReservation(i, false);
       if (response.status === 200) {
       }

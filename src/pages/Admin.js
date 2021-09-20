@@ -37,7 +37,7 @@ const Admin = () => {
         );
         setAllReservations(response.data.reservations);
         setMaxPage(response.data.maxPage);
-        console.log(response.data);
+        // console.log(response.data);
       } else if (clickedButton === 'waiting' && page === 1) {
         const response = await getAllWaitingReservations();
         setWaitingAllReservations(response.data);
@@ -60,7 +60,7 @@ const Admin = () => {
       (page - 1) * pageBlock,
       page * pageBlock
     );
-    console.log('slice', temp);
+    // console.log('slice', temp);
     setAllReservations(temp);
   };
 

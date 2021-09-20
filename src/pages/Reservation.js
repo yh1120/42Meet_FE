@@ -27,24 +27,34 @@ const Reservation = ({ user, setUser }) => {
   const [memberArray, setMemberArray] = useState([]);
 
   const initRooms = async () => {
-    console.log('initRooms');
+    // console.log('initRooms');
+    // try {
+    //   coㅌnst rooms_res = await getRooms();
+    const rooms_res = [
+      {
+        location: '개포',
+        roomName: ['경복궁', '창경궁', '덕수궁'],
+      },
+      {
+        location: '서초',
+        roomName: ['7클', '9클'],
+      },
+    ];
+    setLocations(rooms_res);
     try {
-      const rooms_res = await getRooms();
-      setLocations(rooms_res.data);
-      try {
-        const reservation_res = await getDateReservations(userInput.date);
-        setAlreadyReservations(reservation_res.data);
-        setToken(reservation_res);
-      } catch (err) {
-        console.log(err);
-      }
+      const reservation_res = await getDateReservations(userInput.date);
+      setAlreadyReservations(reservation_res.data);
+      setToken(reservation_res);
     } catch (err) {
       console.log(err);
     }
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const onChange = async (e) => {
-    console.log('onChange');
+    // console.log('onChange');
     const date = e.target.value;
     try {
       const response = await getDateReservations(date);
@@ -75,7 +85,7 @@ const Reservation = ({ user, setUser }) => {
   };
 
   useEffect(() => {
-    console.log('Reservation - useEffect([locations, alreadyReservatoins)');
+    // console.log('Reservation - useEffect([locations, alreadyReservatoins)');
     const getReservedTime = (data) => {
       const temp = {};
       locations.forEach((table) => {
@@ -101,14 +111,14 @@ const Reservation = ({ user, setUser }) => {
   }, [locations, alreadyReservations]);
 
   useEffect(() => {
-    console.log('Reservation - useEffect([])');
+    // console.log('Reservation - useEffect([])');
     initRooms();
   }, []);
 
   return (
     <div>
       <div id="reservation-wrapper">
-        <div>
+        <div style={{ top: 0 }}>
           <div id="datepicker-wrapper">
             <input
               type="date"
