@@ -31,3 +31,10 @@ Base URL: /
 ```
 3. 플로우 차트
 <img width="1018" alt="Screen Shot 2021-06-22 at 11 07 14 AM" src="https://user-images.githubusercontent.com/19147277/122851625-41358800-d34a-11eb-85b9-f404cdfb8224.png">
+
+4. 화면 캡쳐
+<img width="2048" alt="스크린샷 2021-09-21 오전 12 21 10" src="https://user-images.githubusercontent.com/56836077/134028581-9557113c-0b43-4c23-96f0-18f73b6835f1.png">
+<img width="2048" alt="스크린샷 2021-09-21 오전 12 27 24" src="https://user-images.githubusercontent.com/56836077/134029189-e8eb12f4-df5d-4dd7-97e2-d645e8ad0b8c.png">
+<img width="2048" alt="스크린샷 2021-09-21 오전 12 21 18" src="https://user-images.githubusercontent.com/56836077/134028586-1278d474-fc11-4da0-9711-d0675ec2e60d.png">
+<img width="2048" alt="스크린샷 2021-09-21 오전 12 21 28" src="https://user-images.githubusercontent.com/56836077/134028637-f33ace9e-f443-4d30-adce-5ba22904b90d.png">
+
